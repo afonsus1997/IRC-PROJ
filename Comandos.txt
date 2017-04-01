@@ -1,0 +1,28 @@
+Eleitor:
+    
+    Envia:
+    	info <nome_votação>
+    Recebe:
+    	<nome_votacao> aberta/fechado/nao_existente
+    
+
+    Envia:
+        voto <nome_votação> <info_pessoal> <nome_candidato>  (justificação: "Eu sou ... quero votar para ... quero votar em ...)     
+    Recebe:
+        Se <nome_votação> <info_pessoal> <nome_candidato>, validos (votação aberta e existente):
+        	Revebe: Voto Contabilizado
+        Se um ou mais argumentos estejam inválidos (votação fechada e/ou nao existente):
+        	Recebe: Erro/os especifico ao/s argumento/os
+
+    Envia:
+    	resultado <nome_votação>
+
+    Recebe:
+    	Se <nome_votação> for válido (fechado e existente):
+    		Recebe: Resultado específico da votação
+    	Se <nome_votação> for inválido (aberto ou nao existente):
+    		Recebe: Erro específico ao estado da votação
+    		
+            
+                    
+
