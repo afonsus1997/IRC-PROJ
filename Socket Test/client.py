@@ -3,16 +3,18 @@ import sys
 import select
 
 SERVER_PORT = 12000
+SERVER_PORT=12007
+SERVER_PORT = int(input("Input Port > "))
 SERVER_IP   = '127.0.0.1'
 
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
 # o select quer ficar a espera de ler o socket e ler do stdin (consola)
 inputs = [sock, sys.stdin]
-
+print("Connected to server...")
 
 while True:
-  print("Input message to server below.")
+  print("Input message to server:")
   ins, outs, exs = select.select(inputs,[],[])
   #select devolve para a lista ins quem esta a espera de ler
   for i in ins:
@@ -25,7 +27,7 @@ while True:
     # i == sock - o servidor enviou uma mensagem para o socket
     elif i == sock:
       (msg,addr) = sock.recvfrom(1024)
-      print("Message received from server:", msg.decode())
+      print("\n\nMessage received from server: " + msg.decode() + "\n\n")
 
 
 

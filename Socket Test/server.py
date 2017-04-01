@@ -9,11 +9,12 @@ import socket
 
 #INICIALIZACAO
 
-SERVER_PORT=12000
+SERVER_PORT=12007
+SERVER_PORT = int(input("Input Port > "))
 
 server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-server.bind(('',12000))
-
+server.bind(('',SERVER_PORT))
+print("Server Started...\n")
 addrs   = {} # dict: nome -> endereco. Ex: addrs["user"]=('127.0.0.1',17234)
 clients = {} # dict: endereco -> nome. Ex: clients[('127.0.0.1',17234)]="user"
 
@@ -45,18 +46,48 @@ def respond_error(addr):
 
 #CORPO PRINCIPAL
 
+def echo(msg):
+  server.sendto(msg.encode(),addr)
+  
+
+infomessage = "INFO MESSAGE"
+statusmessage = "STATUS MESSAGE"
+
+
+
+
+
+
 while True:
   (msg,addr) = server.recvfrom(1024)
   cmds = msg.decode().split()
   if(cmds[0]=="IAM"):
     register_client(cmds[1],addr)
+    registerOutput = str("Registered " + str(cmds[1]) + " with address " + str(addr) + "\n") 
+    print(registerOutput)
+
+
   elif(cmds[0]=="HELLO"):
     respond_hello(addr)
+
+
   elif(cmds[0]=="HELLOTO"):
     forward_hello(cmds[1])
+
+  elif(cmds[0] == "status"):
+    if (len(cmds)>1 and cmds[1] == "-help"):
+      echo("infomessage")
+    else:
+      echo(statusmessage)
+  
+
   elif(cmds[0]=="KILLSERVER"):
+    println("Killing Server");
+    echo("Killing Server")
     break
   else:
     respond_error(addr)
+  
+  
 
 server.close()
