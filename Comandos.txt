@@ -10,7 +10,7 @@ Eleitor:
         voto <nome_votação> <info_pessoal> <nome_candidato>  (justificação: "Eu sou ... quero votar para ... quero votar em ...)     
     Recebe:
         Se <nome_votação> <info_pessoal> <nome_candidato>, validos (votação aberta e existente):
-        	Revebe: "Voto Contabilizado"
+        	Recebe: "Voto Contabilizado"
         Se um ou mais argumentos estejam inválidos (votação fechada e/ou nao existente):
         	Recebe: Erro/os especifico ao/s argumento/os
 
