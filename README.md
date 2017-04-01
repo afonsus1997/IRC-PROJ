@@ -1,9 +1,9 @@
 
-#Projecto IRC
+# Projecto IRC
 
 
 
-##Lista de comandos
+## Lista de comandos
 ```
 Eleitor:
     
