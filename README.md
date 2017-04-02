@@ -14,7 +14,8 @@ Eleitor:
     
 
     Envia:
-        voto <nome_votacao> <info_pessoal> <nome_candidato>  (justificacao: "Eu sou ... quero votar para ... quero votar em ...)     
+        voto <nome_votacao> <info_pessoal> <nome_candidato>  
+        (justificacao: "Eu sou ... quero votar para ... quero votar em ...)     
     Recebe:
         Se <nome_votacao> <info_pessoal> <nome_candidato>, validos (votacao aberta e existente):
             Recebe: "Voto contabilizado"
