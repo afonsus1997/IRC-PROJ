@@ -30,7 +30,7 @@ def register_client(name,addr):
     server.sendto(respond_msg.encode(),addr)
 
 def respond_hello(addr):
-  respond_msg = "HELLO"
+  respond_msg = "hello"
   if addr in clients: #se addr estiver no dicinario clients, o utilizador existe
     respond_msg += " " + clients[addr]
   respond_msg += "\n"
