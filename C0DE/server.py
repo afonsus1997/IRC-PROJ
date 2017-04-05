@@ -3,6 +3,9 @@ import socket
 SERVER_PORT=0
 server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
+addrs   = {} # dict: nome -> endereco. Ex: addrs["user"]=('127.0.0.1',17234)
+clients = {} # dict: endereco -> nome. Ex: clients[('127.0.0.1',17234)]="user"
+
 def splashscreen():
 	print(" /$$    /$$            /$$     /$$                            /$$$$$$       ")                                            
 	print("| $$   | $$           | $$    |__/                           /$$__  $$")                        
