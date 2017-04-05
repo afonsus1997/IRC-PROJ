@@ -26,6 +26,8 @@ def register_client(name,addr):
   if not name in addrs and not addr in clients:
     addrs[name] = addr
     clients[addr] = name
+    respond_msg = "Registered as " + str(name)
+    server.sendto(respond_msg.encode(),addr)
 
 def respond_hello(addr):
   respond_msg = "HELLO"
@@ -34,7 +36,7 @@ def respond_hello(addr):
   respond_msg += "\n"
   server.sendto(respond_msg.encode(),addr)
 
-def forward_hello(name):
+def forward_hello(name, addr):
   if name in addrs: #novamente, se estiver no dicionario o utilizador existe
     respond_msg = "HELLO " + name + "\n" 
     addr = addrs[name]
@@ -72,7 +74,7 @@ while True:
 
 
   elif(cmds[0]=="HELLOTO"):
-    forward_hello(cmds[1])
+    forward_hello(cmds[1], addr)
 
   elif(cmds[0] == "status"):
     if (len(cmds)>1 and cmds[1] == "-help"):
@@ -82,8 +84,8 @@ while True:
   
 
   elif(cmds[0]=="KILLSERVER"):
-    println("Killing Server");
-    echo("Killing Server")
+    print("Killing Server\n");
+    echo("Killing Server\n")
     break
   else:
     respond_error(addr)
