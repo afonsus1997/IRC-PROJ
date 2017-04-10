@@ -27,6 +27,7 @@ def splashscreen():
 def startup():
 
 	splashscreen()
+	SERVER_PORT = int(input("Input Port > "))
 	print("Connected to server...\n")
 print("----------------------------------------------\n\n")
 
