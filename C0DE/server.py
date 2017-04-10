@@ -1,5 +1,19 @@
 import socket
+
 from time import gmtime, strftime
+
+class color:
+   PURPLE = '\033[95m'
+   CYAN = '\033[96m'
+   DARKCYAN = '\033[36m'
+   BLUE = '\033[94m'
+   GREEN = '\033[92m'
+   YELLOW = '\033[93m'
+   RED = '\033[91m'
+   BOLD = '\033[1m'
+   UNDERLINE = '\033[4m'
+   END = '\033[0m'
+
 
 SERVER_PORT=0
 server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
@@ -8,7 +22,7 @@ addrs   = {} # dict: nome -> endereco. Ex: addrs["user"]=('127.0.0.1',17234)
 clients = {} # dict: endereco -> nome. Ex: clients[('127.0.0.1',17234)]="user"
 
 def splashscreen():
-	print(" /$$    /$$            /$$     /$$                            /$$$$$$       ")                                            
+	print(color.RED + color.BOLD + " /$$    /$$            /$$     /$$                            /$$$$$$       ")                                            
 	print("| $$   | $$           | $$    |__/                           /$$__  $$")                        
 	print("| $$   | $$ /$$$$$$  /$$$$$$   /$$ /$$$$$$$   /$$$$$$       | $$  \__/  /$$$$$$   /$$$$$$  /$$    /$$ /$$$$$$   /$$$$$$ ")
 	print("|  $$ / $$//$$__  $$|_  $$_/  | $$| $$__  $$ /$$__  $$      |  $$$$$$  /$$__  $$ /$$__  $$|  $$  /$$//$$__  $$ /$$__  $$")
@@ -18,8 +32,8 @@ def splashscreen():
 	print("    \_/    \______/    \___/  |__/|__/  |__/ \____  $$       \______/  \_______/|__/          \_/    \_______/|__/      ")
 	print("                                             /$$  \ $$                                                                  ")
 	print("                                            |  $$$$$$/                                                                  ")
-	print("                                             \______/                                                                   ")
-	print("Welcome to Online Voting System(C)\nAfonso Muralha * Joao Galamba * Nuno Miguel Macara\n")
+	print("                                             \______/                                                                   "+ color.END)
+	print(color.YELLOW+ "Welcome to Online Voting System(C)\nAfonso Muralha * Joao Galamba * Nuno Miguel Macara\n" + color.END)
 
 def startup():
 	SERVER_PORT = int(input("Input Port > "))
@@ -34,7 +48,7 @@ def startup():
 def register_users(type, addr):
 	
 	if (type == "manager" or type == "comission") and type in clients:
-		writeLOG("USER ALREADY LOGGED IN!!!")
+		writeLOG(color.RED + color.RED + "WARNING: " + color.END + str(addr[0]) + "Tried to login to an existent user")
 		logerror = "ERROR_USERTAKEN"
 		server.sendto(logerror.encode(),addr)
 
@@ -42,7 +56,7 @@ def register_users(type, addr):
 		addrs[addr] = type
 		clients[type] = addr
 		logaccept = "LOGACCEPT"
-		writeLOG("Registered " + str(addr) + " as " + str(type))
+		writeLOG("Registered " + str(addr) + " as " + color.BOLD + str(type) + color.END)
 		server.sendto(logaccept.encode(),addr)
 
 def checkSpecial(cmd, addr):
@@ -50,6 +64,8 @@ def checkSpecial(cmd, addr):
 		register_users(cmd[1], addr)
 def writeLOG(msg):
 	print(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + " -> " + msg)
+
+
 
 splashscreen()
 startup()
