@@ -16,7 +16,7 @@ class color:
 
 
 SERVER_IP   = '127.0.0.1'
-SERVER_PORT=0
+#SERVER_PORT=0
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 inputs = [sock, sys.stdin]
 
@@ -39,7 +39,8 @@ def splashscreen():
 def startup():
 
 	splashscreen()
-	SERVER_PORT = int(input("Input Port > "))
+	global SERVER_PORT 
+	SERVER_PORT= int(input("Input Port > "))
 	print("Connected to server...\n\n")
 
 	while True:
@@ -89,6 +90,7 @@ while True:
       msg = sys.stdin.readline()
       # envia mensagem da consola para o servidor
       sock.sendto(msg.encode(),(SERVER_IP,SERVER_PORT))
+
     # i == sock - o servidor enviou uma mensagem para o socket
     elif i == sock:
       (msg,addr) = sock.recvfrom(1024)

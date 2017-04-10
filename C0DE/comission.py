@@ -1,0 +1,2 @@
+def checkComission():
+	print("wololo")

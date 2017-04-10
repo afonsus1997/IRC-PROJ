@@ -1,6 +1,11 @@
+import atexit
 import socket
-
+from manager import*
+from voter import*
+from comissioner import*
 from time import gmtime, strftime
+
+
 
 class color:
    PURPLE = '\033[95m'
@@ -18,8 +23,18 @@ class color:
 SERVER_PORT=0
 server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
-addrs   = {} # dict: nome -> endereco. Ex: addrs["user"]=('127.0.0.1',17234)
-clients = {} # dict: endereco -> nome. Ex: clients[('127.0.0.1',17234)]="user"
+addrs   = {} # dict: endereco -> nome. Ex: clients[('127.0.0.1',17234)]="user"
+clients = {} # dict: nome -> endereco. Ex: addrs["user"]=('127.0.0.1',17234)
+
+
+def stopServer():
+
+	server.close()
+	writeLOG("Server Stopped...")
+
+
+#atexit.register(stopServer)
+
 
 def splashscreen():
 	print(color.RED + color.BOLD + " /$$    /$$            /$$     /$$                            /$$$$$$       ")                                            
@@ -59,9 +74,12 @@ def register_users(type, addr):
 		writeLOG("Registered " + str(addr) + " as " + color.BOLD + str(type) + color.END)
 		server.sendto(logaccept.encode(),addr)
 
-def checkSpecial(cmd, addr):
+def loginHandler(cmd, addr):
 	if cmd[0] == "LOGFUNC" and len(cmd) == 2:
 		register_users(cmd[1], addr)
+	
+
+
 def writeLOG(msg):
 	print(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + " -> " + msg)
 
@@ -74,13 +92,25 @@ startup()
 while (True):
 	(msg,addr) = server.recvfrom(1024)
 	cmd = msg.decode().split()
-	checkSpecial(cmd, addr)
+
+	if cmd[0] == "killserver": #SO MANAGER PODERA FAZER ISTO!!!!!
+		stopServer()			#AGORA INDEPENDENTE DO USER!!!
 	
 
+	if(addr not in addrs):
+		loginHandler(cmd, addr)
 
+	elif(addrs[addr] == "manager"):
+		print("OLHO MANAGEIRO")
+		checkManager()
 
+	elif(addrs[addr] == "voter"):
+		print("OLHO VOTADEIRO")
+		checkVoter()
 
-server.close()
-writeLOG("Server Stopped...")
+	elif(addrs[addr] == "comissioner"):
+		print("OLHO COMISSIONEIRO!")
+		checkComission()
+	
 
 

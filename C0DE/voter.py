@@ -1,0 +1,2 @@
+def checkVoter():
+	print("wololo")
