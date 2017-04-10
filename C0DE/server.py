@@ -29,9 +29,38 @@ def startup():
 		exit()
 	print("\nServer Started...\n")
 
+def register_users(type, addr):
+	
+	if (type == "manager" or type == "comission") and type in clients:
+		print("USER ALREADY LOGGED IN!!!")
+		logerror = "ERROR_USERTAKEN"
+		server.sendto(logerror.encode(),addr)
+
+	else:	
+		addrs[addr] = type
+		clients[type] = addr
+		logaccept = "LOGACCEPT"
+		print("Registered " + str(addr) + " as " + str(type))
+		server.sendto(logaccept.encode(),addr)
+
+def checkSpecial(cmd, addr):
+	if cmd[0] == "LOGFUNC" and len(cmd) == 2:
+		register_users(cmd[1], addr)
+
 
 splashscreen()
 startup()
+
+#MAIN CICLE
+while (True):
+	(msg,addr) = server.recvfrom(1024)
+	cmd = msg.decode().split()
+	checkSpecial(cmd, addr)
+	
+
+
+
+
 server.close()
 print("Server Stopped...")
 
