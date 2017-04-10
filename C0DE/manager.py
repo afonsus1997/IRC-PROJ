@@ -1,4 +1,8 @@
-def checkManager():
+import server.py
+
+
+def checkManager(cmd, addr):
+	print("friend manaja")
 	pass
 
 def criaEleicao():

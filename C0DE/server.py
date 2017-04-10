@@ -2,7 +2,7 @@ import atexit
 import socket
 from manager import*
 from voter import*
-from comissioner import*
+from comission import*
 from time import gmtime, strftime
 
 
@@ -60,24 +60,37 @@ def startup():
 	print("\n")
 	writeLOG("Server Started...\n")
 
+def sendMessage(msg, addr):
+	sending = str(msg)
+	server.sendto(sending.encode(),addr)
+
+	
+
 def register_users(type, addr):
 	
 	if (type == "manager" or type == "comission") and type in clients:
 		writeLOG(color.RED + color.RED + "WARNING: " + color.END + str(addr[0]) + "Tried to login to an existent user")
 		logerror = "ERROR_USERTAKEN"
-		server.sendto(logerror.encode(),addr)
+		sendMessage(logerror, addr)
+		#server.sendto(logerror.encode(),addr)
 
 	else:	
 		addrs[addr] = type
 		clients[type] = addr
 		logaccept = "LOGACCEPT"
 		writeLOG("Registered " + str(addr) + " as " + color.BOLD + str(type) + color.END)
-		server.sendto(logaccept.encode(),addr)
+		sendMessage(logaccept, addr)
+		#server.sendto(logaccept.encode(),addr)
 
 def loginHandler(cmd, addr):
 	if cmd[0] == "LOGFUNC" and len(cmd) == 2:
 		register_users(cmd[1], addr)
 	
+def logoutHandler(cmd, addr):
+	writeLOG("User " + color.BOLD + addrs[addr] + color.END + " with address " + color.BOLD + str(addr) + color.END +" has sucessfully logged out\n")
+	del clients[addrs[addr]] 
+	del addrs[addr]
+	loginHandler(cmd, addr)
 
 
 def writeLOG(msg):
@@ -96,21 +109,22 @@ while (True):
 	if cmd[0] == "killserver": #SO MANAGER PODERA FAZER ISTO!!!!!
 		stopServer()			#AGORA INDEPENDENTE DO USER!!!
 	
+	if cmd[0] == "logout":
+		logoutHandler(cmd, addr)
 
 	if(addr not in addrs):
 		loginHandler(cmd, addr)
 
 	elif(addrs[addr] == "manager"):
-		print("OLHO MANAGEIRO")
+		
 		checkManager()
 
 	elif(addrs[addr] == "voter"):
-		print("OLHO VOTADEIRO")
+		
 		checkVoter()
 
-	elif(addrs[addr] == "comissioner"):
-		print("OLHO COMISSIONEIRO!")
-		checkComission()
+	elif(addrs[addr] == "comission"):
+		checkComission(cmd, addr)
 	
 
 

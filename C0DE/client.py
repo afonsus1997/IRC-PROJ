@@ -41,13 +41,14 @@ def startup():
 	splashscreen()
 	global SERVER_PORT 
 	SERVER_PORT= int(input("Input Port > "))
-	print("Connected to server...\n\n")
+	print(color.GREEN + "Connected to server...\n\n" + color.END)
 
+def loginHandler():
 	while True:
 		print("Please input your login:  (voter, manager or comission)\n")
 		logintype = raw_input("")
 		if(logintype == ("voter") or logintype == ("manager") or logintype == ("comission")):
-			print("\nLogging in...\n")
+			print(color.YELLOW + "\nLogging in...\n" + color.END)
 
 			logmessage = "LOGFUNC " + logintype
 			sock.sendto(logmessage.encode(),(SERVER_IP,SERVER_PORT))
@@ -69,6 +70,11 @@ def startup():
 			print("User not recognised, please input again: (voter, manager or comission)")
 
 
+def exitHandler():
+	msg = "logout"
+	sock.sendto(msg.encode(),(SERVER_IP,SERVER_PORT))
+	sys.exit(color.GREEN + color.BOLD + "User logged out, and exited program, have a good day!\n" + color.END)
+
 print("----------------------------------------------\n\n")
 
 
@@ -76,7 +82,7 @@ print("----------------------------------------------\n\n")
 
 
 startup()
-
+loginHandler()
 print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
 
 while True:
@@ -90,6 +96,13 @@ while True:
       msg = sys.stdin.readline()
       # envia mensagem da consola para o servidor
       sock.sendto(msg.encode(),(SERVER_IP,SERVER_PORT))
+      if msg == "killserver\n":
+      	sys.exit("Server Exited")
+      if msg == "exit\n":
+      	exitHandler()
+      if msg == "logout\n":
+      	loginHandler()
+      print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
 
     # i == sock - o servidor enviou uma mensagem para o socket
     elif i == sock:
@@ -99,5 +112,3 @@ while True:
       print("Input message to server:")
 
 
-server.close()
-print("Server Stopped...")

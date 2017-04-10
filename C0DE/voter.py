@@ -1,2 +1,4 @@
-def checkVoter():
-	print("wololo")
+from server import *
+
+def checkVoter(cmd, addr):
+	print("friend votie")
