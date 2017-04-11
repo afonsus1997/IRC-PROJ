@@ -1,11 +1,15 @@
 import atexit
+import os
 import socket
 from manager import*
 from voter import*
 from comission import*
 from time import gmtime, strftime
+import shutil
 
 
+
+path = str(os.getcwd()) + "/elecfiles/"
 
 class color:
    PURPLE = '\033[95m'
@@ -50,6 +54,40 @@ def splashscreen():
 	print("                                             \______/                                                                   "+ color.END)
 	print(color.YELLOW+ "Welcome to Online Voting System(C)\nAfonso Muralha * Joao Galamba * Nuno Miguel Macara\n" + color.END)
 
+
+
+
+
+
+def fileHandler(op):
+	if op == "init":
+		path = str(os.getcwd()) + "/elecfiles/"
+		if not os.path.exists(path):
+			os.makedirs(path)
+		path += "votacoes.txt"
+		if not os.path.exists(path):
+			file = open(path,"w")
+			file.close()
+	if op =="clean&init":
+		path = str(os.getcwd()) + "/elecfiles/"
+		shutil.rmtree(path)
+		fileHandler("init")
+
+'''
+def verifyFiles():
+	if os.path.exists(path + "votacoes.txt"):
+		file = open(path + "votacoes.txt", "r")
+		votacoes = file.split()
+		if len(votacoes) == 0:
+			return False
+		for x in range(len(votacoes)):
+			if not (os.path.exists(path + str(votacoes[x]) + ".txt")):
+				return False
+		return True
+	return True
+'''
+
+
 def startup():
 	SERVER_PORT = int(input("Input Port > "))
 	try:
@@ -60,9 +98,25 @@ def startup():
 	print("\n")
 	writeLOG("Server Started...\n")
 
+	'''
+	if verifyFiles() == True:
+		fileHandler("init")
+	else:
+		fileHandler("clean&init")
+	
+	'''
+	fileHandler("init")#create txt folder
+
+
+
+
 def sendMessage(msg, addr):
 	sending = str(msg)
 	server.sendto(sending.encode(),addr)
+
+
+
+
 
 	
 
@@ -82,9 +136,17 @@ def register_users(type, addr):
 		sendMessage(logaccept, addr)
 		#server.sendto(logaccept.encode(),addr)
 
+
+
+
+
 def loginHandler(cmd, addr):
 	if cmd[0] == "LOGFUNC" and len(cmd) == 2:
 		register_users(cmd[1], addr)
+
+
+
+
 	
 def logoutHandler(cmd, addr):
 	writeLOG("User " + color.BOLD + addrs[addr] + color.END + " with address " + color.BOLD + str(addr) + color.END +" has sucessfully logged out\n")
@@ -93,8 +155,26 @@ def logoutHandler(cmd, addr):
 	loginHandler(cmd, addr)
 
 
+
+
+
+
 def writeLOG(msg):
 	print(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + " -> " + msg)
+
+
+
+
+def verifyFiles():
+	if os.path.exists(path + "votacoes.txt"):
+		file = open(path + "votacoes.txt", "r")
+		votacoes = file.split()
+		for x in range(len(votacoes)):
+			if not (os.path.exists(path + str(votacoes[x]) + ".txt")):
+				return False
+		return True
+
+
 
 
 

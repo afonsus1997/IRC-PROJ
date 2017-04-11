@@ -1,3 +1,6 @@
+import os
+
+path = os.getcwd() + "/elecfiles/"
 
 class color:
    PURPLE = '\033[95m'
@@ -11,6 +14,7 @@ class color:
    UNDERLINE = '\033[4m'
    END = '\033[0m'
 
+
 class helpText:
 	info = "info de info incpeption"
 	criaeleicao = "help de criaeleicao"
@@ -22,6 +26,9 @@ class errors:
 	more = color.BOLD + color.RED + "Erro: " + color.END + "Demasiados argumentos!\nUse o unico argumento -help para mais informacoes"
 	less = color.BOLD + color.RED + "Erro: " + color.END + "Faltam argumentos!\nUse o unico argumento -help para mais informacoes"
 	unknwn = color.BOLD + color.RED + "Erro: " + color.END + "Comando deconhecido\nUse o comando commands para listar todos os comandos possiveis"
+	votexiste = color.BOLD + color.RED + "Erro: " + color.END + "Ja existe uma votacao com o nome indicado"
+	voteinexist = color.BOLD + color.RED + "Erro: " + color.END + "Nao existe uma votacao com o nome indicado"
+	voteabrt = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja aberta"
 
 
 
@@ -42,18 +49,18 @@ def checkManager(cmd, addr):
 			if cmd[1] == "-help":
 				server.sendMessage(helpText.info, addr)
 			else:	
-				info("esp", cmd[1], addr)
+				info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
 			server.sendMessage(errors.more, addr)
 
 
 		#CRIA ELEICAO
-		elif cmd[0] == "cria_eleicao":
+		elif cmd[0] == "cria_votacao":
 			if lengh == 2:
 				if cmd[1] == "-help":
 					server.sendMessage(helpText.criaeleicao, addr)
 				else:
-					criaEleicao(cmd[1], addr)
+					criaVotacao(cmd[1], addr)
 				
 			elif lengh == 1:
 				server.sendMessage(errors.less, addr)
@@ -85,6 +92,9 @@ def checkManager(cmd, addr):
 			elif len > 2:
 				server.sendMessage(errors.more, addr)
 
+		elif cmd[0] == "cleandir":
+			server.fileHandler("clean&init")
+
 
 		elif cmd[0] == "commands":
 			if lengh == 1:
@@ -95,22 +105,89 @@ def checkManager(cmd, addr):
 		else:
 			server.sendMessage(errors.unknwn, addr)
 
-def criaEleicao(nome, addr):
+def ficheiroToList(nome):
+	ret = open(path + nome, "r")
+	#votacoes = votacoes.split()
+	with open(path + nome) as f:
+		content = f.readlines()
+		f.close()
+	ret = [x.strip() for x in content]
+	return ret
+
+def criaVotacao(nome, addr):
 	import server
-	send = "Cria votacao com nome " + str(nome) 
-	server.sendMessage(send, addr)
+	votacoes = ficheiroToList("votacoes.txt")
+	if not ((nome + " 0" in votacoes) or (nome + " 1" in votacoes) or (nome + " 2" in votacoes)):
+		votacoes.append(nome)
+		actualz = open(path + "votacoes.txt", "a")
+		actualz.write(votacoes[len(votacoes)-1] + " 0" + "\n")
+		actualz.close()
+		novo = open(path + nome + ".txt", "w")
+		novo.close()
+		send = "Criada votacao com nome " + str(nome) 	
+		server.sendMessage(send, addr)
+	else:
+		server.sendMessage(errors.votexiste, addr)
+
+def votacaoNome(votacao):
+	return str(votacao[0:len(votacao)-2])
+
+def votacaoEstado(votacao):
+	return str(votacao[-1])
+
+def votacaoIndice(lista, votacao):
+	for x in range(len(lista)):
+		if votacaoNome(lista[x]) == str(votacao):
+			return x
+	return "erro"
+
+def createInfo(vot):
+	part = color.BOLD + votacaoNome(vot)+ color.END + "\n-"
+	if votacaoEstado(vot) == "0":
+		part += "Criada\n"
+	elif votacaoEstado(vot) == "1":
+		part += color.BOLD + color.YELLOW + "Aberta\n" + color.END
+	elif votacaoEstado(vot) == "2":
+		part += "Fechada\n"
+	return part
+
 
 def info(tipo, nome, addr):
 	import server
 	if str(tipo) == "all":
-		send = "todas as infos!"
+		send = "\n\n"
+		lista = ficheiroToList("votacoes.txt")
+
+		for x in range(len(lista)):
+			send += createInfo(lista[x]) + "\n"
 		server.sendMessage(send, addr)
+
+
 	elif str(tipo) == "espec":
-		send = "info da vot " + str(nome)
+		
+		lista = ficheiroToList("votacoes.txt")
+		indice = votacaoIndice(lista, nome)
+		if indice == "erro":
+			return server.sendMessage(errors.voteinexist, addr)
+		send = "\n\n\n"
+		send += createInfo(lista[indice]) + "\n"
 		server.sendMessage(send, addr)
 	
 def abre(nome, addr):
 	import server
+	lista = ficheiroToList("votacoes.txt")
+	indice = votacaoIndice(lista, nome)
+	if indice == "erro":
+		return server.sendMessage(errors.voteinexist, addr)
+	if votacaoEstado(lista[indice]) == 1:
+		return server.sendMessage(errors.voteabrt, addr)
+	lista[indice] = nome + " 1"
+	f = open(path + "votacoes.txt", 'w')
+	for x in range(len(lista)):
+		f.write(lista[x] + "\n")
+	f.close()
+
+
 	send = "Abre votacao com nome " + str(nome)
 	server.sendMessage(send, addr)
 
