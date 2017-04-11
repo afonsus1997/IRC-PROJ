@@ -29,6 +29,9 @@ class errors:
 	votexiste = color.BOLD + color.RED + "Erro: " + color.END + "Ja existe uma votacao com o nome indicado"
 	voteinexist = color.BOLD + color.RED + "Erro: " + color.END + "Nao existe uma votacao com o nome indicado"
 	voteabrt = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja aberta"
+	voteconc = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja concluido"
+	voteinic = color.BOLD + color.RED + "Erro: " + color.END + "Votacao nao inicializada"
+	votefec = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja fechada"
 
 
 
@@ -86,7 +89,7 @@ def checkManager(cmd, addr):
 				if cmd[1] == "-help":
 					server.sendMessage(helpText.fecha, addr)
 				else:
-					fecha([1], addr)
+					fecha(cmd[1], addr)
 			elif len== 1:
 				server.sendMessage(errors.less, addr)
 			elif len > 2:
@@ -179,19 +182,37 @@ def abre(nome, addr):
 	indice = votacaoIndice(lista, nome)
 	if indice == "erro":
 		return server.sendMessage(errors.voteinexist, addr)
-	if votacaoEstado(lista[indice]) == 1:
+	if votacaoEstado(lista[indice]) == "1":
 		return server.sendMessage(errors.voteabrt, addr)
+	if votacaoEstado(lista[indice]) == "2":
+		return server.sendMessage(errors.voteconc, addr)
+
 	lista[indice] = nome + " 1"
 	f = open(path + "votacoes.txt", 'w')
 	for x in range(len(lista)):
 		f.write(lista[x] + "\n")
 	f.close()
-
-
-	send = "Abre votacao com nome " + str(nome)
+	
+	send = "Votacao " + color.GREEN + color.BOLD + nome + color.END + " aberta"
 	server.sendMessage(send, addr)
 
 def fecha(nome, addr):
 	import server
-	send = "Fecha votacao com nome " + str(nome)
+	lista = ficheiroToList("votacoes.txt")
+	indice = votacaoIndice(lista, nome)
+	if indice == "erro":
+		return server.sendMessage(errors.voteinexist, addr)
+	if votacaoEstado(lista[indice]) == "0":
+		return server.sendMessage(errors.voteinic, addr)	
+	if votacaoEstado(lista[indice]) == "2":
+		return server.sendMessage(errors.votefec, addr)
+	
+
+	lista[indice] = nome + " 2"
+	f = open(path + "votacoes.txt", 'w')
+	for x in range(len(lista)):
+		f.write(lista[x] + "\n")
+	f.close()
+	
+	send = "Votacao " + color.GREEN + color.BOLD + nome + color.END + " fechada"
 	server.sendMessage(send, addr)
