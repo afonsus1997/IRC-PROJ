@@ -21,6 +21,7 @@ sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 inputs = [sock, sys.stdin]
 
 def splashscreen():
+	print("---------------------------------------------------------------------------------\n\n")
 	print("\n" + color.BOLD + color.CYAN)
 	print(" /$$    /$$            /$$     /$$                            /$$$$$$  /$$ /$$                       /$$")
 	print("| $$   | $$           | $$    |__/                           /$$__  $$| $$|__/                      | $$    ")
@@ -34,7 +35,7 @@ def splashscreen():
 	print("                                            |  $$$$$$/                                                      ")
 	print("                                             \______/                                                       " + color.END)
 	print("\n" + color.YELLOW + "Welcome to Online Voting System(C)\nAfonso Muralha * Joao Galamba * Nuno Miguel Macara\n" + color.END)	
-
+	print("\n\n---------------------------------------------------------------------------------\n\n")
 
 def startup():
 
@@ -45,7 +46,8 @@ def startup():
 
 def loginHandler():
 	while True:
-		print("Please input your login:  (voter, manager or comission)\n")
+		print("\n\n---------------------------------------------------------------------------------\n\n")
+		print(color.BOLD + color.YELLOW + "Please input your login:" + color.END + "   (voter, manager or comission)\n")
 		logintype = raw_input("")
 		if(logintype == ("voter") or logintype == ("manager") or logintype == ("comission")):
 			print(color.YELLOW + "\nLogging in...\n" + color.END)
@@ -60,10 +62,12 @@ def loginHandler():
 				  if i == sock:				  
 				    (msg,addr) = sock.recvfrom(1024)
 				    if msg == "ERROR_USERTAKEN":
-				    	print("User taken! Please try again\n\n")
+				    	print(color.BOLD + color.RED + "User taken!" + color.END + " Please try again\n\n")
+				    	print("---------------------------------------------------------------------------------\n\n")
 				    	break
 				    elif msg == "LOGACCEPT":
-						print("\nRegistered as " + color.BOLD + color.YELLOW + logintype + color.END + "\n")
+						print("\nRegistered as " + color.BOLD + color.YELLOW + logintype + color.END)
+						print("\n\n---------------------------------------------------------------------------------\n\n")
 						return
 				break				
 		else:
@@ -75,7 +79,6 @@ def exitHandler():
 	sock.sendto(msg.encode(),(SERVER_IP,SERVER_PORT))
 	sys.exit(color.GREEN + color.BOLD + "User logged out, and exited program, have a good day!\n" + color.END)
 
-print("----------------------------------------------\n\n")
 
 
 
@@ -102,13 +105,12 @@ while True:
       	exitHandler()
       if msg == "logout\n":
       	loginHandler()
-      print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
 
     # i == sock - o servidor enviou uma mensagem para o socket
     elif i == sock:
       (msg,addr) = sock.recvfrom(1024)
-      print("\n\nMessage received from server: " + msg.decode() + "\n")
+      print(color.BOLD + color.YELLOW + "\n\nMessage received from server: "+ color.END + msg.decode() + "\n")
       print("----------------------------------------------\n\n")
-      print("Input message to server:")
+      print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
 
 

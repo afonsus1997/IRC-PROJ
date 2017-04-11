@@ -105,26 +105,29 @@ startup()
 while (True):
 	(msg,addr) = server.recvfrom(1024)
 	cmd = msg.decode().split()
+	print(str(cmd))
+	if len(cmd)>0:
 
-	if cmd[0] == "killserver": #SO MANAGER PODERA FAZER ISTO!!!!!
-		stopServer()			#AGORA INDEPENDENTE DO USER!!!
-	
-	if cmd[0] == "logout":
-		logoutHandler(cmd, addr)
-
-	if(addr not in addrs):
-		loginHandler(cmd, addr)
-
-	elif(addrs[addr] == "manager"):
+		if cmd[0] == "killserver": #SO MANAGER PODERA FAZER ISTO!!!!!
+			stopServer()			#AGORA INDEPENDENTE DO USER!!!
 		
-		checkManager()
+		if cmd[0] == "logout":
+			logoutHandler(cmd, addr)
 
-	elif(addrs[addr] == "voter"):
+		if(addr not in addrs):
+			loginHandler(cmd, addr)
+
+		elif(addrs[addr] == "manager"):
+			
+			checkManager(cmd, addr)
+
+		elif(addrs[addr] == "voter"):
+			
+			checkVoter()
+
+		elif(addrs[addr] == "comission"):
+			checkComission(cmd, addr)
+			#checkManager(cmd, addr)
 		
-		checkVoter()
-
-	elif(addrs[addr] == "comission"):
-		checkComission(cmd, addr)
-	
 
 

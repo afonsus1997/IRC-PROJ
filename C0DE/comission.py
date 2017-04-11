@@ -1,4 +1,6 @@
-from server import *
+import server
+
+
 def checkComission(cmd, addr):
 	test = "Mensagem para a comissao"
-	sendMessage(test, addr)
+	server.sendMessage(test, addr)

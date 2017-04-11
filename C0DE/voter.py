@@ -1,4 +1,4 @@
-from server import *
+import server
 
 def checkVoter(cmd, addr):
 	print("friend votie")
