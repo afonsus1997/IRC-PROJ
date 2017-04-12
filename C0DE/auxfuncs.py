@@ -45,6 +45,14 @@ class errorsVoter:
 	candinv = color.BOLD + color.RED + "Erro: " + color.END + "Candidato invalido"
 
 
+class errorsComission:
+	less = color.BOLD + color.RED + "Erro: " + color.END + "Faltam argumentos!\nUse o unico argumento commands para mais informacoes"
+	unknwn = color.BOLD + color.RED + "Erro: " + color.END + "Comando deconhecido\nUse o comando commands para listar todos os comandos possiveis"
+	votacaoinexist = color.BOLD + color.RED + "Erro: " + color.END + "Nao existe nenhuma votacao com o nome indicado"
+	timeover = color.BOLD + color.RED + "Erro: " + color.END + "A votacao que procura ja nao aceita novos candidatos"
+	candidatoexis = color.BOLD + color.RED + "Erro: " + color.END + "O candidato ja esta adicionado a esta votacao"
+
+
 
 class helpTextManager:
 	info = "\n\ninfo\n-Lista informacoes dos estados de todas as votacoes\ninfo <nome_votacao>\n-Lista informacoes do estado da votacao apresentada\n"
@@ -55,9 +63,17 @@ class helpTextManager:
 	
 	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info\n-cria_votacao\n-abre\n-fecha\n-cleandir\n-logout\n-exit\n-killserver"
 
+class helpTextComission:
+	info = "\n\ninfo\n-Lista informacoes dos de uma votacao\ninfo <nome_votacao>\n"
+	adicionacandidato = "\n\nadiciona_candidato <votacao> <nome_candidato>\n-Adiciona um candidato a uma votacao especifica\n"
+
+	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-adiciona_candidato <votacao> <nome_candidato>\n-info <votacao>"
+
+
+
 
 def sendMessage(msg, addr):
-	import server
+	#import server
 	sending = str(msg)
 	serverInfo.server.sendto(sending.encode(),addr)
 

@@ -26,7 +26,7 @@ class helpText:
 ######################################################################################################################################################
 
 def checkVoter(cmd, addr):
-	import server
+	#import server
     
 
 	lengh = len(cmd)
@@ -38,16 +38,16 @@ def checkVoter(cmd, addr):
 			info("all", 0, addr)
 		elif cmd[0] == "info" and lengh == 2: 
 			if cmd[1] == "-help":
-				server.sendMessage(helpText.info, addr)
+				sendMessage(helpText.info, addr)
 			else:	
 				info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
-			server.sendMessage(errors.more, addr)
+			sendMessage(errors.more, addr)
 
         elif cmd[0] == "vota" and lengh < 4:
-            pass
+            pass #falta isto
         elif cmd[0] == "vota" and lengh > 4:
-            pass
+            pass #flta isto
         elif cmd[0] == "vota" and lengh == 4:
             votar(cmd[1], cmd[2], cmd[3], addr)
         
@@ -56,8 +56,6 @@ def checkVoter(cmd, addr):
 	else:
 		sendMessage(errorsVoter.unknwn, addr)       
   
-def infovotos(asd, dfg, ghj):
-    return
 
 
 
@@ -144,7 +142,7 @@ def createInfo(vot):
 
    
 def info(tipo, nome, addr):
-	import server
+	#import server
 	if str(tipo) == "all":
 		send = "\n\n"
 		lista = ficheiroToList("votacoes.txt")

@@ -4,9 +4,9 @@ import socket
 from manager import*
 from voter import*
 from comission import*
+from auxfuncs import*
 from time import gmtime, strftime
 import shutil
-from auxfuncs import*
 
 
 path = str(os.getcwd()) + "/elecfiles/"

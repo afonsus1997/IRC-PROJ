@@ -9,7 +9,7 @@ path = os.getcwd() + "/elecfiles/"
 
 
 def checkManager(cmd, addr):
-	import server	
+	#import server	
 	send = ""
 	sendMessage(send, addr)
 
@@ -91,7 +91,7 @@ def checkManager(cmd, addr):
 
 
 def criaVotacao(nome, addr):
-	import server
+	#import server
 	votacoes = ficheiroToList("votacoes.txt")
 	if not ((nome + " 0" in votacoes) or (nome + " 1" in votacoes) or (nome + " 2" in votacoes)):
 		votacoes.append(nome)
@@ -133,7 +133,7 @@ def createInfo(vot):
 
 
 def info(tipo, nome, addr):
-	import server
+	#import server
 	if str(tipo) == "all":
 		send = "\n\n"
 		lista = ficheiroToList("votacoes.txt")
@@ -154,7 +154,7 @@ def info(tipo, nome, addr):
 		sendMessage(send, addr)
 	
 def abre(nome, addr):
-	import server
+	#import server
 	lista = ficheiroToList("votacoes.txt")
 	indice = votacaoIndice(lista, nome)
 	if indice == "erro":
@@ -174,7 +174,7 @@ def abre(nome, addr):
 	sendMessage(send, addr)
 
 def fecha(nome, addr):
-	import server
+	#import server
 	lista = ficheiroToList("votacoes.txt")
 	indice = votacaoIndice(lista, nome)
 	if indice == "erro":
