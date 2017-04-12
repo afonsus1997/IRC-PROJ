@@ -54,6 +54,7 @@ class errorsComission:
 	votacaoinexist = color.BOLD + color.RED + "Erro: " + color.END + "Nao existe nenhuma votacao com o nome indicado"
 	timeover = color.BOLD + color.RED + "Erro: " + color.END + "A votacao que procura ja nao aceita novos candidatos"
 	candidatoexis = color.BOLD + color.RED + "Erro: " + color.END + "O candidato ja esta adicionado a esta votacao"
+	candidatoenix = color.BOLD + color.RED + "Erro: " + color.END + "O candidato ja esta adicionado a esta votacao"
 	errogen = color.BOLD + color.RED + "Erro: " + color.END + "Comando Incorrecto"
 
 

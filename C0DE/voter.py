@@ -58,7 +58,6 @@ def checkVoter(cmd, addr):
   
 
 
-
 def candidatoinfo(candidato):
     infocand=candidato.split()
     return infocand

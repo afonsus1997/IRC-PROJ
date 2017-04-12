@@ -102,11 +102,13 @@ def adicionaCandidato(nome, votacao, addr):
 	#import server
 	existe_candidato = False
 	lista_elei = ficheiroToList("votacoes.txt")
+	if os.path.exists(votacao + ".candidates"):
+		return sendMessage(errorsComission.votacaoinexist, addr)
 	lista_cand = ficheiroToList(votacao + ".candidates")
 	if votacao + " 0" in lista_elei or votacao + " 1" in lista_elei or votacao + " 2" in lista_elei:
 		if votacao + " 0" in lista_elei:
 			if nome in lista_cand:
-				sendMessage(errorsComission.candidatoexis, addr)#erro ja existe
+				return sendMessage(errorsComission.candidatoexis, addr)#erro ja existe
 			else:
 				if len(lista_cand) == 0:
 					lista_cand = [str(nome)]
