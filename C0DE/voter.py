@@ -4,9 +4,9 @@ from auxfuncs import*
 path = os.getcwd() + "/elecfiles/"
 
 '''
-info - X
+info - V
 
-voto - X
+voto - V
 
 resultado - X
 
@@ -34,24 +34,27 @@ def checkVoter(cmd, addr):
 	if lengh>=1:
 
 		#INFO
-		if cmd[0] == "infovotos" and lengh == 1:
-			infovotos("all", 0, addr)
-		elif cmd[0] == "infovotos" and lengh == 2: 
+		if cmd[0] == "info" and lengh == 1:
+			info("all", 0, addr)
+		elif cmd[0] == "info" and lengh == 2: 
 			if cmd[1] == "-help":
 				server.sendMessage(helpText.info, addr)
 			else:	
-				infovotos("espec", cmd[1], addr)
-		elif cmd[0] == "infovotos" and lengh > 2:
+				info("espec", cmd[1], addr)
+		elif cmd[0] == "info" and lengh > 2:
 			server.sendMessage(errors.more, addr)
 
-        if cmd[0] == "vota" and lengh < 4:
+        elif cmd[0] == "vota" and lengh < 4:
             pass
         elif cmd[0] == "vota" and lengh > 4:
             pass
         elif cmd[0] == "vota" and lengh == 4:
             votar(cmd[1], cmd[2], cmd[3], addr)
-            
-            
+        
+		
+
+	else:
+		sendMessage(errorsVoter.unknwn, addr)       
   
 def infovotos(asd, dfg, ghj):
     return
@@ -121,7 +124,48 @@ def candidato_val(votacao, candidato, addr):
     else:
     	return sendMessage(errorsVoter.candinv, addr)
     
-    
+def votacaoNome(votacao):
+	return str(votacao[0:len(votacao)-2])
+
+def votacaoEstado(votacao):
+	return str(votacao[-1])
+
+
+def createInfo(vot):
+	part = color.BOLD + votacaoNome(vot)+ color.END + "\n-"
+	if votacaoEstado(vot) == "0":
+		part += "Criada\n"
+	elif votacaoEstado(vot) == "1":
+		part += color.BOLD + color.YELLOW + "Aberta\n" + color.END
+	elif votacaoEstado(vot) == "2":
+		part += "Fechada\n"
+	return part
+
+
+   
+def info(tipo, nome, addr):
+	import server
+	if str(tipo) == "all":
+		send = "\n\n"
+		lista = ficheiroToList("votacoes.txt")
+
+		for x in range(len(lista)):
+			send += createInfo(lista[x]) + "\n"
+		sendMessage(send, addr)
+
+
+	elif str(tipo) == "espec":
+		
+		lista = ficheiroToList("votacoes.txt")
+		indice = votacaoIndice(lista, nome)
+		if indice == "erro":
+			return sendMessage(errorsManager.voteinexist, addr)
+		send = "\n\n\n"
+		send += createInfo(lista[indice]) + "\n"
+		sendMessage(send, addr)
+
+
+
 '''
 
 
