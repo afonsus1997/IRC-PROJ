@@ -1,5 +1,6 @@
 import socket
 import os
+import shutil
 
 class serverInfo:
 	PORT = 0
@@ -43,14 +44,17 @@ class errorsVoter:
 	votefec = color.BOLD + color.RED + "Erro: " + color.END + "Votacao fechada"
 	voteinv = color.BOLD + color.RED + "Erro: " + color.END + "Votacao invalida (fechada ou concluida)"
 	candinv = color.BOLD + color.RED + "Erro: " + color.END + "Candidato invalido"
+	corr = color.BOLD + color.RED + "Erro: " + color.END + "Ficheiro de votacao corrompidos"
 
 
 class errorsComission:
+	more = color.BOLD + color.RED + "Erro: " + color.END + "Demasiados argumentos!\nUse o unico argumento -help para mais informacoes"
 	less = color.BOLD + color.RED + "Erro: " + color.END + "Faltam argumentos!\nUse o unico argumento commands para mais informacoes"
 	unknwn = color.BOLD + color.RED + "Erro: " + color.END + "Comando deconhecido\nUse o comando commands para listar todos os comandos possiveis"
 	votacaoinexist = color.BOLD + color.RED + "Erro: " + color.END + "Nao existe nenhuma votacao com o nome indicado"
 	timeover = color.BOLD + color.RED + "Erro: " + color.END + "A votacao que procura ja nao aceita novos candidatos"
 	candidatoexis = color.BOLD + color.RED + "Erro: " + color.END + "O candidato ja esta adicionado a esta votacao"
+	errogen = color.BOLD + color.RED + "Erro: " + color.END + "Comando Incorrecto"
 
 
 
@@ -70,6 +74,20 @@ class helpTextComission:
 	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-adiciona_candidato <votacao> <nome_candidato>\n-info <votacao>"
 
 
+
+def fileHandler(op):
+	if op == "init":
+		path = str(os.getcwd()) + "/elecfiles/"
+		if not os.path.exists(path):
+			os.makedirs(path)
+		path += "votacoes.txt"
+		if not os.path.exists(path):
+			file = open(path,"w")
+			file.close()
+	if op =="clean&init":
+		path = str(os.getcwd()) + "/elecfiles/"
+		shutil.rmtree(path)
+		fileHandler("init")
 
 
 def sendMessage(msg, addr):

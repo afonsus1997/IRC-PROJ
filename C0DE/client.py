@@ -1,6 +1,9 @@
 import socket
 import sys
 import select
+import auxfuncs
+
+
 
 class color:
    PURPLE = '\033[95m'
@@ -73,6 +76,9 @@ def loginHandler():
 		else:
 			print("User not recognised, please input again: (voter, manager or comission)")
 
+def logoutHandler(addr):
+	sendMessage("logout", addr)
+
 
 def exitHandler():
 	msg = "logout"
@@ -105,12 +111,15 @@ while True:
       	exitHandler()
       if msg == "logout\n":
       	loginHandler()
+      	print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
+      	#print("---------------------------------------------------------------------------------\n\n")
+
 
     # i == sock - o servidor enviou uma mensagem para o socket
     elif i == sock:
       (msg,addr) = sock.recvfrom(1024)
-      print(color.BOLD + color.YELLOW + "\n\nMessage received from server: "+ color.END + msg.decode() + "\n")
-      print("----------------------------------------------\n\n")
+      print(color.BOLD + color.YELLOW + "\n\nMessage received from server: "+ color.END + msg.decode() + "\n\n")
+      print("---------------------------------------------------------------------------------\n\n")
       print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
 
 

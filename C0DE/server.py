@@ -47,20 +47,6 @@ def splashscreen():
 
 
 
-def fileHandler(op):
-	if op == "init":
-		path = str(os.getcwd()) + "/elecfiles/"
-		if not os.path.exists(path):
-			os.makedirs(path)
-		path += "votacoes.txt"
-		if not os.path.exists(path):
-			file = open(path,"w")
-			file.close()
-	if op =="clean&init":
-		path = str(os.getcwd()) + "/elecfiles/"
-		shutil.rmtree(path)
-		fileHandler("init")
-
 '''
 def verifyFiles():
 	if os.path.exists(path + "votacoes.txt"):
@@ -131,9 +117,11 @@ def loginHandler(cmd, addr):
 	
 def logoutHandler(cmd, addr):
 	writeLOG("User " + color.BOLD + serverInfo.addrs[addr] + color.END + " with address " + color.BOLD + str(addr) + color.END +" has sucessfully logged out\n")
+	#send = color.GREEN + color.BOLD + str(serverInfo.clients[serverInfo.addrs[addr]]) + " successfully logged out\n\n"
 	del serverInfo.clients[serverInfo.addrs[addr]] 
 	del serverInfo.addrs[addr]
-	loginHandler(cmd, addr)
+	#sendMessage(send, addr)
+	logState = False
 
 
 
@@ -141,7 +129,7 @@ def logoutHandler(cmd, addr):
 
 
 def writeLOG(msg):
-	print(strftime("%Y-%m-%d %H:%M:%S", gmtime()) + " -> " + msg)
+	print(color.BOLD + strftime("%Y-%m-%d %H:%M:%S", gmtime()) + " -> " + color.END + msg + "\n")
 
 
 
@@ -166,7 +154,7 @@ startup()
 while (True):
 	(msg,addr) = serverInfo.server.recvfrom(1024)
 	cmd = msg.decode().split()
-	print(str(cmd))
+	writeLOG(str(cmd))
 	if len(cmd)>0:
 
 		if cmd[0] == "killserver": #SO MANAGER PODERA FAZER ISTO!!!!!

@@ -1,6 +1,6 @@
 import os
 from auxfuncs import*
-
+#wololo
 path = os.getcwd() + "/elecfiles/"
 
 '''
@@ -38,23 +38,23 @@ def checkVoter(cmd, addr):
 			info("all", 0, addr)
 		elif cmd[0] == "info" and lengh == 2: 
 			if cmd[1] == "-help":
-				sendMessage(helpText.info, addr)
+				return sendMessage(helpText.info, addr)
 			else:	
 				info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
-			sendMessage(errors.more, addr)
+			return sendMessage(errors.more, addr)
 
-        elif cmd[0] == "vota" and lengh < 4:
-            pass #falta isto
+        if cmd[0] == "vota" and lengh < 4:
+            return sendMessage(errorsVoter.less, addr)
         elif cmd[0] == "vota" and lengh > 4:
-            pass #flta isto
+            return sendMessage(errorsVoter.more, addr)
         elif cmd[0] == "vota" and lengh == 4:
-            votar(cmd[1], cmd[2], cmd[3], addr)
+			return votar(cmd[1], cmd[2], cmd[3], addr)
         
 		
 
 	else:
-		sendMessage(errorsVoter.unknwn, addr)       
+		return sendMessage(errorsVoter.unknwn, addr)       
   
 
 
@@ -75,11 +75,14 @@ def candidatoIndice(lista, candidato):
 #votacao.votos - cc
 def votar(votacao, cc, candidato, addr):				
 	if votacao_existe(votacao, addr) and cc_unico(cc, votacao, addr) and candidato_val(votacao, candidato, addr):
-		
+		print("true \n")
 		#votos = ficheiroToList(votacao + ".votes")
 		candidatos = ficheiroToList(votacao + ".votes")
+		print(candidatos)
 		indice = candidatoIndice(candidatos, candidato)
+		print(indice)
 		info = candidatoinfo(candidatos[indice])
+		print(info[0] + " , " + info[1])
 		#info[0] = nome info[1]+votos
 		info[1] = int(info[1])
 		info[1] += 1
@@ -97,16 +100,18 @@ def votar(votacao, cc, candidato, addr):
 		send = "Voto contabilizado!"
 		return sendMessage(send, addr)
 
+
 	
 
 def votacao_existe(votacao, addr):
-    #tem de existir votacao.cc + votacao.candidates + votacao.votes
-    if os.path.exists(path + "votacoes.txt"):
-    	lista = ficheiroToList("votacoes.txt")
-    	if str(votacao + " 1") in lista:
-    		return True
-    else:
-    	return sendMessage(errorsVoter.voteinv, addr)
+	if os.path.exists(path + "votacoes.txt"):
+		lista = ficheiroToList("votacoes.txt")
+		if str(votacao + " 1") in lista:
+			return True
+		else:
+			return sendMessage(errorsVoter.voteinv, addr)
+	else:
+		return sendMessage(errorsVoter.corr, addr)
 
 def cc_unico(cc, votacao, addr):
     lista = ficheiroToList(votacao + ".cc")

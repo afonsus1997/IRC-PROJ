@@ -70,8 +70,8 @@ def checkManager(cmd, addr):
 
 		elif cmd[0] == "cleandir":
 			if lengh == 1:
-				server.fileHandler("clean&init")
-				sendMessage(color.RED + color.BOLD + "\n\nDirectory Cleaned!\n\n" + color.END, addr)
+				fileHandler("clean&init")
+				sendMessage(color.RED + color.BOLD + "\n\nDirectory Cleaned!" + color.END, addr)
 			if lengh == 2:
 				if cmd[1] == "-help":
 					sendMessage(helpText.cleandir, addr)
@@ -139,7 +139,7 @@ def info(tipo, nome, addr):
 		lista = ficheiroToList("votacoes.txt")
 
 		for x in range(len(lista)):
-			send += createInfo(lista[x]) + "\n"
+			send += createInfo(lista[x]) 
 		sendMessage(send, addr)
 
 
