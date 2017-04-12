@@ -6,33 +6,21 @@ from voter import*
 from comission import*
 from time import gmtime, strftime
 import shutil
-
+from auxfuncs import*
 
 
 path = str(os.getcwd()) + "/elecfiles/"
 
-class color:
-   PURPLE = '\033[95m'
-   CYAN = '\033[96m'
-   DARKCYAN = '\033[36m'
-   BLUE = '\033[94m'
-   GREEN = '\033[92m'
-   YELLOW = '\033[93m'
-   RED = '\033[91m'
-   BOLD = '\033[1m'
-   UNDERLINE = '\033[4m'
-   END = '\033[0m'
+
 
 
 SERVER_PORT=0
-server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 
-addrs   = {} # dict: endereco -> nome. Ex: clients[('127.0.0.1',17234)]="user"
-clients = {} # dict: nome -> endereco. Ex: addrs["user"]=('127.0.0.1',17234)
+
+ # dict: nome -> endereco. Ex: serverInfo.addrs["user"]=('127.0.0.1',17234)
 
 
 def stopServer():
-
 	server.close()
 	writeLOG("Server Stopped...")
 
@@ -89,9 +77,9 @@ def verifyFiles():
 
 
 def startup():
-	SERVER_PORT = int(input("Input Port > "))
+	serverInfo.SERVER_PORT = int(input("Input Port > "))
 	try:
-		server.bind(('',SERVER_PORT))
+		serverInfo.server.bind(('',serverInfo.SERVER_PORT))
 	except:
 		raise Exception('Error Binding port')
 		exit()
@@ -110,27 +98,20 @@ def startup():
 
 
 
-def sendMessage(msg, addr):
-	sending = str(msg)
-	server.sendto(sending.encode(),addr)
-
-
-
-
 
 	
 
 def register_users(type, addr):
 	
-	if (type == "manager" or type == "comission") and type in clients:
+	if (type == "manager" or type == "comission") and type in serverInfo.clients:
 		writeLOG(color.RED + color.RED + "WARNING: " + color.END + str(addr[0]) + "Tried to login to an existent user")
 		logerror = "ERROR_USERTAKEN"
 		sendMessage(logerror, addr)
 		#server.sendto(logerror.encode(),addr)
 
 	else:	
-		addrs[addr] = type
-		clients[type] = addr
+		serverInfo.addrs[addr] = type
+		serverInfo.clients[type] = addr
 		logaccept = "LOGACCEPT"
 		writeLOG("Registered " + str(addr) + " as " + color.BOLD + str(type) + color.END)
 		sendMessage(logaccept, addr)
@@ -149,9 +130,9 @@ def loginHandler(cmd, addr):
 
 	
 def logoutHandler(cmd, addr):
-	writeLOG("User " + color.BOLD + addrs[addr] + color.END + " with address " + color.BOLD + str(addr) + color.END +" has sucessfully logged out\n")
-	del clients[addrs[addr]] 
-	del addrs[addr]
+	writeLOG("User " + color.BOLD + serverInfo.addrs[addr] + color.END + " with address " + color.BOLD + str(addr) + color.END +" has sucessfully logged out\n")
+	del serverInfo.clients[serverInfo.addrs[addr]] 
+	del serverInfo.addrs[addr]
 	loginHandler(cmd, addr)
 
 
@@ -183,7 +164,7 @@ startup()
 
 #MAIN CICLE
 while (True):
-	(msg,addr) = server.recvfrom(1024)
+	(msg,addr) = serverInfo.server.recvfrom(1024)
 	cmd = msg.decode().split()
 	print(str(cmd))
 	if len(cmd)>0:
@@ -194,18 +175,18 @@ while (True):
 		if cmd[0] == "logout":
 			logoutHandler(cmd, addr)
 
-		if(addr not in addrs):
+		if(addr not in serverInfo.addrs):
 			loginHandler(cmd, addr)
 
-		elif(addrs[addr] == "manager"):
+		elif(serverInfo.addrs[addr] == "manager"):
 			
 			checkManager(cmd, addr)
 
-		elif(addrs[addr] == "voter"):
+		elif(serverInfo.addrs[addr] == "voter"):
 			
 			checkVoter()
 
-		elif(addrs[addr] == "comission"):
+		elif(serverInfo.addrs[addr] == "comission"):
 			checkComission(cmd, addr)
 			#checkManager(cmd, addr)
 		
