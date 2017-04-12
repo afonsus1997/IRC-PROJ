@@ -98,8 +98,12 @@ def criaVotacao(nome, addr):
 		actualz = open(path + "votacoes.txt", "a")
 		actualz.write(votacoes[len(votacoes)-1] + " 0" + "\n")
 		actualz.close()
-		novo = open(path + nome + ".txt", "w")
+		novo = open(path + nome + ".candidates", "w")
 		novo.close()
+		votos = open(path + nome + ".votes", "w")
+		votos.close()
+		cc = open(path + nome + ".cc", "w")
+		cc.close()
 		send = "Criada votacao com nome " + str(nome) 	
 		sendMessage(send, addr)
 	else:

@@ -184,7 +184,7 @@ while (True):
 
 		elif(serverInfo.addrs[addr] == "voter"):
 			
-			checkVoter()
+			checkVoter(cmd, addr)
 
 		elif(serverInfo.addrs[addr] == "comission"):
 			checkComission(cmd, addr)

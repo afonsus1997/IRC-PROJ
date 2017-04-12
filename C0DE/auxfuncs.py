@@ -33,6 +33,18 @@ class errorsManager:
 	votefec = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja fechada"
 	errogen = color.BOLD + color.RED + "Erro: " + color.END + "Comando Incorrecto"
 
+class errorsVoter:
+	more = color.BOLD + color.RED + "Erro: " + color.END + "Demasiados argumentos!\nUse o unico argumento -help para mais informacoes"
+	less = color.BOLD + color.RED + "Erro: " + color.END + "Faltam argumentos!\nUse o unico argumento -help para mais informacoes"
+	unknwn = color.BOLD + color.RED + "Erro: " + color.END + "Comando deconhecido\nUse o comando commands para listar todos os comandos possiveis"
+	revote = color.BOLD + color.RED + "Erro: " + color.END + "O seu voto ja foi contabilizado"
+	voteconc = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja concluido"
+	voteinic = color.BOLD + color.RED + "Erro: " + color.END + "Votacao nao existente"
+	votefec = color.BOLD + color.RED + "Erro: " + color.END + "Votacao fechada"
+	voteinv = color.BOLD + color.RED + "Erro: " + color.END + "Votacao invalida (fechada ou concluida)"
+	candinv = color.BOLD + color.RED + "Erro: " + color.END + "Candidato invalido"
+
+
 
 class helpTextManager:
 	info = "\n\ninfo\n-Lista informacoes dos estados de todas as votacoes\ninfo <nome_votacao>\n-Lista informacoes do estado da votacao apresentada\n"
