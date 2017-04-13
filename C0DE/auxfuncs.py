@@ -63,10 +63,10 @@ class helpTextManager:
 	info = "\n\ninfo\n-Lista informacoes dos estados de todas as votacoes\ninfo <nome_votacao>\n-Lista informacoes do estado da votacao apresentada\n"
 	criaeleicao = "\n\ncria_votacao <nome_votacao>\n-Inicializa uma votacao\n"
 	abre = "\n\nabre <nome_votacao>\n-Abre uma votacao fechada\n"
-	fecha = "\n\nfecha <nome_votacao>\n-Fecha uma votacao fechada\n"
+	fecha = "\n\nfecha <nome_votacao>\n-Fecha uma votacao aberta\n"
 	cleandir = "\n\ncleandir\n-Limpa a directoria de trabalho (APAGA TODOS OS DADOS DE VOTACOES!)\n"
 	logout = "\n\nlogout\n-Fecha a sessao actual\n"
-	
+
 	
 	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info\n-cria_votacao\n-abre\n-fecha\n-cleandir\n-logout\n-exit\n-killserver"
 
