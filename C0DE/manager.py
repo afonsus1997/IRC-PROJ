@@ -11,9 +11,13 @@ path = os.getcwd() + "/elecfiles/"
 def checkManager(cmd, addr):
 	#import server	
 	send = ""
-	sendMessage(send, addr)
+	#sendMessage(send, addr)
 
 	lengh = len(cmd)
+	print(cmd)
+
+	if cmd == []:
+		return sendMessage(errorsManager.unknwn, addr)	
 
 	if lengh>=1:
 
@@ -23,70 +27,72 @@ def checkManager(cmd, addr):
 			info("all", 0, addr)
 		elif cmd[0] == "info" and lengh == 2: 
 			if cmd[1] == "-help":
-				sendMessage(helpTextManager.info, addr)
+				return sendMessage(helpTextManager.info, addr)
 			else:	
 				info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
-			sendMessage(errorsManager.more, addr)
+			return sendMessage(errorsManager.more, addr)
 
 
 		#CRIA ELEICAO
 		elif cmd[0] == "cria_votacao":
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpTextManager.criaeleicao, addr)
+					return sendMessage(helpTextManager.criaeleicao, addr)
 				else:
 					criaVotacao(cmd[1], addr)
 				
 			elif lengh == 1:
-				sendMessage(errorsManager.less, addr)
+				return sendMessage(errorsManager.less, addr)
 			else:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 
 		elif cmd[0] == "abre":
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpTextManager.abre, addr)
+					return sendMessage(helpTextManager.abre, addr)
 				else:
 					abre(cmd[1], addr)
 			elif len== 1:
 				
-				sendMessage(errorsManager.less, addr)
+				return sendMessage(errorsManager.less, addr)
 			elif len > 2:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 
 		elif cmd[0] == "fecha":
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpTextManager.fecha, addr)
+					return sendMessage(helpTextManager.fecha, addr)
 				else:
 					fecha(cmd[1], addr)
 			elif len== 1:
-				sendMessage(errorsManager.less, addr)
+				return sendMessage(errorsManager.less, addr)
 			elif len > 2:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 		elif cmd[0] == "cleandir":
 			if lengh == 1:
 				fileHandler("clean&init")
-				sendMessage(color.RED + color.BOLD + "\n\nDirectory Cleaned!" + color.END, addr)
+				return sendMessage(color.RED + color.BOLD + "\n\nDirectory Cleaned!" + color.END, addr)
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpText.cleandir, addr)
+					return sendMessage(helpTextManager.cleandir, addr)
 				else:
-					sendMessage(errorsManager.errogen, addr)
+					return sendMessage(errorsManager.errogen, addr)
 
 
 		elif cmd[0] == "commands":
 			if lengh == 1:
-				sendMessage(helpTextManager.comandos, addr)
+				return sendMessage(helpTextManager.comandos, addr)
 			else:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 		else:
-			sendMessage(errorsManager.unknwn, addr)
+			return sendMessage(errorsManager.unknwn, addr)
+	else:
+		return sendMessage(errorsManager.unknwn, addr)
 
 
 

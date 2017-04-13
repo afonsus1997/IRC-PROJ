@@ -65,6 +65,8 @@ class helpTextManager:
 	abre = "\n\nabre <nome_votacao>\n-Abre uma votacao fechada\n"
 	fecha = "\n\nfecha <nome_votacao>\n-Fecha uma votacao fechada\n"
 	cleandir = "\n\ncleandir\n-Limpa a directoria de trabalho (APAGA TODOS OS DADOS DE VOTACOES!)\n"
+	logout = "\n\nlogout\n-Fecha a sessao actual\n"
+	
 	
 	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info\n-cria_votacao\n-abre\n-fecha\n-cleandir\n-logout\n-exit\n-killserver"
 
@@ -76,9 +78,9 @@ class helpTextComission:
 
 class helpTextVoter:
 	info = "\n\ninfo\n-Lista informacoes dos de uma votacao\ninfo <nome_votacao>\n"
-	adicionacandidato = "\n\nadiciona_candidato <votacao> <nome_candidato>\n-Adiciona um candidato a uma votacao especifica\n"
-
-	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-adiciona_candidato <votacao> <nome_candidato>\n-info <votacao>"
+	resultados = "\n\nresultados <votacao>\n-Lista resultados de uma votacao terminada\n"
+	vota = "\n\nvota <votacao> <cc> <candidato>\n-Vota numa votacao especifica fornecendo o cc do utilizador (se valido) e candidato (se valido)\n"
+	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info <votacao> \n-resultados <votacao>\n-vota <votacao> <cc> <candidato>"
 
 
 def fileHandler(op):

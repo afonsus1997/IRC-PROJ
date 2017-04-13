@@ -155,6 +155,7 @@ while (True):
 	(msg,addr) = serverInfo.server.recvfrom(1024)
 	cmd = msg.decode().split()
 	writeLOG(str(cmd))
+	
 	if len(cmd)>0:
 
 		if cmd[0] == "killserver": #SO MANAGER PODERA FAZER ISTO!!!!!
@@ -178,5 +179,6 @@ while (True):
 			checkComission(cmd, addr)
 			#checkManager(cmd, addr)
 		
-
+	if len(cmd) == 0:
+		sendMessage(errorsManager.unknwn, addr)
 

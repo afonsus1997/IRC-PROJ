@@ -15,13 +15,6 @@ outro -X
 '''
 
 
-class helpText:
-    info = "info de info incpeption"
-    votar = "help votacao"
-    listar = "help resultados"
-    commands = "help comands"
-
-
 
 ######################################################################################################################################################
 
@@ -35,24 +28,33 @@ def checkVoter(cmd, addr):
 
 		#INFO
 		if cmd[0] == "info" and lengh == 1:
-			info("all", 0, addr)
+			return info("all", 0, addr)
 		elif cmd[0] == "info" and lengh == 2: 
 			if cmd[1] == "-help":
-				return sendMessage(helpText.info, addr)
+				return sendMessage(helpTextVoter.info, addr)
 			else:	
 				info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
 			return sendMessage(errors.more, addr)
 
-        if cmd[0] == "vota" and lengh < 4:
-            return sendMessage(errorsVoter.less, addr)
-        elif cmd[0] == "vota" and lengh > 4:
-            return sendMessage(errorsVoter.more, addr)
-        elif cmd[0] == "vota" and lengh == 4:
-			return votar(cmd[1], cmd[2], cmd[3], addr)
-        
-		
+		if cmd[0] == "vota" and lengh == 2:
+			if cmd[1] == "-help":
+				return sendMessage(helpTextVoter.vota, addr)
+			else:
+				sendMessage(errorsVoter.unknwn, addr)
 
+
+		if cmd[0] == "vota" and lengh < 4:
+			return sendMessage(errorsVoter.less, addr)
+		elif cmd[0] == "vota" and lengh > 4:
+			return sendMessage(errorsVoter.more, addr)
+		elif cmd[0] == "vota" and lengh == 4:
+			return votar(cmd[1], cmd[2], cmd[3], addr)
+		elif lengh == 1 and cmd[0] == "commands":
+			return sendMessage(helpTextVoter.comandos, addr)
+
+		else:
+			return sendMessage(errorsVoter.unknwn, addr)
 	else:
 		return sendMessage(errorsVoter.unknwn, addr)       
   
@@ -76,6 +78,10 @@ def votar(votacao, cc, candidato, addr):
 	if votacao_existe(votacao, addr) and cc_unico(cc, votacao, addr) and candidato_val(votacao, candidato, addr):
 		print("true \n")
 		#votos = ficheiroToList(votacao + ".votes")
+
+		if not os.path.exists(path + votacao + ".votes"):
+			return sendMessage(errors.Voter.corr, addr)
+
 		candidatos = ficheiroToList(votacao + ".votes")
 		print(candidatos)
 		indice = candidatoIndice(candidatos, candidato)
@@ -88,10 +94,14 @@ def votar(votacao, cc, candidato, addr):
 		act = info[0] + " " + str(info[1])
 		candidatos[indice] = act
 	
+		if not os.path.exists(path + "votacoes.txt"):
+			return sendMessage(errors.Voter.corr, addr)
 		actual = open(path + votacao + ".votes", "w")
 		for x in range(len(candidatos)):
 		    actual.write(str(candidatos[x]) + "\n")
 
+		if not os.path.exists(path + votacao + ".cc"):
+			return sendMessage(errors.Voter.corr, addr)
 		votos = open(path + votacao + ".cc", "a")
 		votos.write(str(cc) + "\n")
 
@@ -151,9 +161,12 @@ def info(tipo, nome, addr):
 		send = "\n\n"
 		lista = ficheiroToList("votacoes.txt")
 
-		for x in range(len(lista)):
-			send += createInfo(lista[x]) + "\n"
-		sendMessage(send, addr)
+		if len(lista) == 1:
+			send += createInfo(lista[0]) + "\n"
+		else:
+			for x in range(len(lista)):
+				send += createInfo(lista[x]) + "\n"
+		return sendMessage(send, addr)
 
 
 	elif str(tipo) == "espec":
@@ -164,7 +177,7 @@ def info(tipo, nome, addr):
 			return sendMessage(errorsManager.voteinexist, addr)
 		send = "\n\n\n"
 		send += createInfo(lista[indice]) + "\n"
-		sendMessage(send, addr)
+		return sendMessage(send, addr)
 
 
 
