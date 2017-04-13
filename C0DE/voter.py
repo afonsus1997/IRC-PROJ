@@ -25,6 +25,7 @@ class helpText:
 
 ######################################################################################################################################################
 
+#AUX
 def checkVoter(cmd, addr):
 	#import server
     
@@ -71,6 +72,8 @@ def candidatoIndice(lista, candidato):
 			return x
 	return "erro"
 
+
+
 #votacao.votos - cc
 def votar(votacao, cc, candidato, addr):				
 	if votacao_existe(votacao, addr) and cc_unico(cc, votacao, addr) and candidato_val(votacao, candidato, addr):
@@ -101,7 +104,7 @@ def votar(votacao, cc, candidato, addr):
 
 
 	
-
+#TEST
 def votacao_existe(votacao, addr):
 	if os.path.exists(path + "votacoes.txt"):
 		lista = ficheiroToList("votacoes.txt")
@@ -111,6 +114,8 @@ def votacao_existe(votacao, addr):
 			return sendMessage(errorsVoter.voteinv, addr)
 	else:
 		return sendMessage(errorsVoter.corr, addr)
+
+
 
 def cc_unico(cc, votacao, addr):
     lista = ficheiroToList(votacao + ".cc")
@@ -133,6 +138,7 @@ def votacaoEstado(votacao):
 	return str(votacao[-1])
 
 
+#INFO
 def createInfo(vot):
 	part = color.BOLD + votacaoNome(vot)+ color.END + "\n-"
 	if votacaoEstado(vot) == "0":
@@ -143,8 +149,7 @@ def createInfo(vot):
 		part += "Fechada\n"
 	return part
 
-
-   
+  
 def info(tipo, nome, addr):
 	#import server
 	if str(tipo) == "all":
