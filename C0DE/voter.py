@@ -33,7 +33,7 @@ def checkVoter(cmd, addr):
 			if cmd[1] == "-help":
 				return sendMessage(helpTextVoter.info, addr)
 			else:	
-				info("espec", cmd[1], addr)
+				return info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
 			return sendMessage(errors.more, addr)
 
@@ -52,6 +52,16 @@ def checkVoter(cmd, addr):
 			return votar(cmd[1], cmd[2], cmd[3], addr)
 		elif lengh == 1 and cmd[0] == "commands":
 			return sendMessage(helpTextVoter.comandos, addr)
+
+		if cmd[0] == "resultados" and lengh == 2 and cmd[1] == "-help":
+			return sendMessage(helpTextVoter.resultados, addr)
+		elif cmd[0] == "resultados" and lengh == 2 and cmd[1] != "-help":
+			return resultado(cmd[1], addr)
+		elif cmd[0] == "resultados" and lengh > 2:
+			return sendMessage(errorsVoter.more, addr)
+		elif cmd[0] == "resultados" and lengh < 2:
+			return sendMessage(errorsVoter.less, addr)
+
 
 		else:
 			return sendMessage(errorsVoter.unknwn, addr)
@@ -122,6 +132,17 @@ def votacao_existe(votacao, addr):
 	else:
 		return sendMessage(errorsVoter.corr, addr)
 
+
+def votacao_concluida(votacao, addr):
+	if os.path.exists(path + "votacoes.txt"):
+		lista = ficheiroToList("votacoes.txt")
+		if str(votacao + " 2") in lista:
+			return True
+		else:
+			return sendMessage(errorsVoter.voteinv, addr)
+	else:
+		return sendMessage(errorsVoter.corr, addr)
+
 def cc_unico(cc, votacao, addr):
     lista = ficheiroToList(votacao + ".cc")
     if str(cc) in lista:
@@ -179,9 +200,18 @@ def info(tipo, nome, addr):
 		send += createInfo(lista[indice]) + "\n"
 		return sendMessage(send, addr)
 
+def resultado(nome, addr):
+
+	if votacao_concluida(nome, addr):
+		for line in reversed(open(path + nome + ".votes").readlines()):
+			linha = line.rstrip()
+			break
+		sendMessage(linha, addr)
+	else:
+		return sendMessage(errorsVoter.voteinv, addr)
 
 
-'''
+	'''
 
 
 

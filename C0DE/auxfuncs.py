@@ -9,7 +9,6 @@ class serverInfo:
 	clients = {}
 	path = os.getcwd() + "/elecfiles/"
 
-
 class color:
    PURPLE = '\033[95m'
    CYAN = '\033[96m'
@@ -39,10 +38,11 @@ class errorsVoter:
 	less = color.BOLD + color.RED + "Erro: " + color.END + "Faltam argumentos!\nUse o unico argumento -help para mais informacoes"
 	unknwn = color.BOLD + color.RED + "Erro: " + color.END + "Comando deconhecido\nUse o comando commands para listar todos os comandos possiveis"
 	revote = color.BOLD + color.RED + "Erro: " + color.END + "O seu voto ja foi contabilizado"
-	voteconc = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja concluido"
+	voteconc = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja concluida"
 	voteinic = color.BOLD + color.RED + "Erro: " + color.END + "Votacao nao existente"
 	votefec = color.BOLD + color.RED + "Erro: " + color.END + "Votacao fechada"
-	voteinv = color.BOLD + color.RED + "Erro: " + color.END + "Votacao invalida (fechada ou concluida)"
+	voteaibert = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ainda aberta"
+	voteinv = color.BOLD + color.RED + "Erro: " + color.END + "Votacao invalida"
 	candinv = color.BOLD + color.RED + "Erro: " + color.END + "Candidato invalido"
 	corr = color.BOLD + color.RED + "Erro: " + color.END + "Ficheiro de votacao corrompidos"
 
@@ -111,3 +111,16 @@ def ficheiroToList(nome):
 		f.close()
 	ret = [x.strip() for x in content]
 	return ret
+
+
+def votacaoNome(votacao):
+	return str(votacao[0:len(votacao)-2])
+
+def votacaoEstado(votacao):
+	return str(votacao[-1])
+
+def votacaoIndice(lista, votacao):
+	for x in range(len(lista)):
+		if votacaoNome(lista[x]) == str(votacao):
+			return x
+	return "erro"

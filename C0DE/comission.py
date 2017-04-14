@@ -118,12 +118,12 @@ def adicionaCandidato(nome, votacao, addr):
 					lista_cand.append(nome)
 
 		else:
-			sendMessage(errorsComission.timeover, addr)
-			return
+			return sendMessage(errorsComission.timeover, addr)
+			
 
 	else:
-		sendMessage(errorsComission.votacaoinexist, addr)
-		return
+		return sendMessage(errorsComission.votacaoinexist, addr)
+		
 	
 	f = open(path + votacao + ".candidates", 'w')
 	for x in range(len(lista_cand)):
