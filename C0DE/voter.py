@@ -201,12 +201,11 @@ def info(tipo, nome, addr):
 		return sendMessage(send, addr)
 
 def resultado(nome, addr):
-
+	send = "\nOs resultados para a votacao " + nome + " sao:\n\n"
 	if votacao_concluida(nome, addr):
-		for line in reversed(open(path + nome + ".votes").readlines()):
-			linha = line.rstrip()
-			break
-		sendMessage(linha, addr)
+		file = open(path + nome + ".votes", "r")	
+		send += file.read()
+		sendMessage(send, addr)
 	else:
 		return sendMessage(errorsVoter.voteinv, addr)
 
