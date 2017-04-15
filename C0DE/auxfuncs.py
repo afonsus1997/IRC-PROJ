@@ -45,6 +45,7 @@ class errorsVoter:
 	voteinv = color.BOLD + color.RED + "Erro: " + color.END + "Votacao invalida"
 	candinv = color.BOLD + color.RED + "Erro: " + color.END + "Candidato invalido"
 	corr = color.BOLD + color.RED + "Erro: " + color.END + "Ficheiro de votacao corrompidos"
+	ccinv = color.BOLD + color.RED + "Erro: " + color.END + "Informacao pessoal invalida"	
 
 
 class errorsComission:

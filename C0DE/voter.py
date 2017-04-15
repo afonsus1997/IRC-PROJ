@@ -1,25 +1,11 @@
 import os
 from auxfuncs import*
-#wololo
+
 path = os.getcwd() + "/elecfiles/"
 
-'''
-info - V
-
-voto - V
-
-resultado - X
-
-outro -X
-
-'''
-
-
-
-######################################################################################################################################################
 
 def checkVoter(cmd, addr):
-	#import server
+
     
 
 	lengh = len(cmd)
@@ -85,7 +71,7 @@ def candidatoIndice(lista, candidato):
 
 #votacao.votos - cc
 def votar(votacao, cc, candidato, addr):				
-	if votacao_existe(votacao, addr) and cc_unico(cc, votacao, addr) and candidato_val(votacao, candidato, addr):
+	if votacao_existe(votacao, addr) and cc_val(cc, votacao, addr) and cc_unico(cc, votacao, addr) and candidato_val(votacao, candidato, addr):
 		print("true \n")
 		#votos = ficheiroToList(votacao + ".votes")
 
@@ -150,6 +136,19 @@ def cc_unico(cc, votacao, addr):
     else:
     	return True
     
+def cc_val(cc, votacao, addr): 
+    try: 
+      int(cc) 
+      if len(str(cc))==8: 
+        return True 
+      else: 
+        sendMessage(errorsVoter.ccinv, addr) 
+    except: 
+      return sendMessage(errorsVoter.ccinv, addr) 
+
+
+
+
 def candidato_val(votacao, candidato, addr):
     lista = ficheiroToList(votacao + ".candidates")
     if str(candidato) in lista:
