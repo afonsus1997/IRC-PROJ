@@ -26,32 +26,34 @@ def checkComission(cmd, addr):
 
 	if lengh == 1:
 		if cmd[0] == "commands":
-			sendMessage(helpTextComission.comandos, addr)
+			return sendMessage(helpTextComission.comandos, addr)
 		
 
 		else:
-			sendMessage(errorsComission.unknwn, addr)
+			return sendMessage(errorsComission.unknwn, addr)
 
 	elif lengh == 0:
-		sendMessage(errorsComission.less, addr)
+		return sendMessage(errorsComission.less, addr)
 
 	elif lengh == 2:
 		print("entrei\n")
 		if cmd[0] == "info" and cmd[1] == "-help":
-			sendMessage(helpTextComission.info, addr)
+			return sendMessage(helpTextComission.info, addr)
 		if cmd[0] == "adiciona_candidato" and cmd[1] == "-help":
-			sendMessage(helpTextComission.adicionacandidato, addr)
+			return sendMessage(helpTextComission.adicionacandidato, addr)
 		if cmd[0] == "info":
 			info(cmd[1], addr)
 		else:	
-			sendMessage(errorsComission.unknwn, addr)
+			return sendMessage(errorsComission.unknwn, addr)
 
 	elif lengh == 3:
 		if cmd[0] == "adiciona_candidato":
-			adicionaCandidato(cmd[2], cmd[1], addr)
+			return adicionaCandidato(cmd[2], cmd[1], addr)
+		else:
+			return sendMessage(errorsComission.unknwn, addr)	
 
 	else:
-		sendMessage(errorsComission.unknwn, addr)
+		return sendMessage(errorsComission.unknwn, addr)
 
 
 
@@ -116,12 +118,12 @@ def adicionaCandidato(nome, votacao, addr):
 					lista_cand.append(nome)
 
 		else:
-			sendMessage(errorsComission.timeover, addr)
-			return
+			return sendMessage(errorsComission.timeover, addr)
+			
 
 	else:
-		sendMessage(errorsComission.votacaoinexist, addr)
-		return
+		return sendMessage(errorsComission.votacaoinexist, addr)
+		
 	
 	f = open(path + votacao + ".candidates", 'w')
 	for x in range(len(lista_cand)):

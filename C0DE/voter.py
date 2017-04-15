@@ -15,17 +15,9 @@ outro -X
 '''
 
 
-class helpText:
-    info = "info de info incpeption"
-    votar = "help votacao"
-    listar = "help resultados"
-    commands = "help comands"
-
-
 
 ######################################################################################################################################################
 
-#AUX
 def checkVoter(cmd, addr):
 	#import server
     
@@ -36,24 +28,43 @@ def checkVoter(cmd, addr):
 
 		#INFO
 		if cmd[0] == "info" and lengh == 1:
-			info("all", 0, addr)
+			return info("all", 0, addr)
 		elif cmd[0] == "info" and lengh == 2: 
 			if cmd[1] == "-help":
-				return sendMessage(helpText.info, addr)
+				return sendMessage(helpTextVoter.info, addr)
 			else:	
-				info("espec", cmd[1], addr)
+				return info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
 			return sendMessage(errors.more, addr)
 
-        if cmd[0] == "vota" and lengh < 4:
-            return sendMessage(errorsVoter.less, addr)
-        elif cmd[0] == "vota" and lengh > 4:
-            return sendMessage(errorsVoter.more, addr)
-        elif cmd[0] == "vota" and lengh == 4:
-			return votar(cmd[1], cmd[2], cmd[3], addr)
-        
-		
+		if cmd[0] == "vota" and lengh == 2:
+			if cmd[1] == "-help":
+				return sendMessage(helpTextVoter.vota, addr)
+			else:
+				sendMessage(errorsVoter.unknwn, addr)
 
+
+		if cmd[0] == "vota" and lengh < 4:
+			return sendMessage(errorsVoter.less, addr)
+		elif cmd[0] == "vota" and lengh > 4:
+			return sendMessage(errorsVoter.more, addr)
+		elif cmd[0] == "vota" and lengh == 4:
+			return votar(cmd[1], cmd[2], cmd[3], addr)
+		elif lengh == 1 and cmd[0] == "commands":
+			return sendMessage(helpTextVoter.comandos, addr)
+
+		if cmd[0] == "resultados" and lengh == 2 and cmd[1] == "-help":
+			return sendMessage(helpTextVoter.resultados, addr)
+		elif cmd[0] == "resultados" and lengh == 2 and cmd[1] != "-help":
+			return resultado(cmd[1], addr)
+		elif cmd[0] == "resultados" and lengh > 2:
+			return sendMessage(errorsVoter.more, addr)
+		elif cmd[0] == "resultados" and lengh < 2:
+			return sendMessage(errorsVoter.less, addr)
+
+
+		else:
+			return sendMessage(errorsVoter.unknwn, addr)
 	else:
 		return sendMessage(errorsVoter.unknwn, addr)       
   
@@ -72,13 +83,15 @@ def candidatoIndice(lista, candidato):
 			return x
 	return "erro"
 
-
-
 #votacao.votos - cc
 def votar(votacao, cc, candidato, addr):				
 	if votacao_existe(votacao, addr) and cc_val(cc, votacao, addr) and cc_unico(cc, votacao, addr) and candidato_val(votacao, candidato, addr):
 		print("true \n")
 		#votos = ficheiroToList(votacao + ".votes")
+
+		if not os.path.exists(path + votacao + ".votes"):
+			return sendMessage(errors.Voter.corr, addr)
+
 		candidatos = ficheiroToList(votacao + ".votes")
 		print(candidatos)
 		indice = candidatoIndice(candidatos, candidato)
@@ -91,10 +104,14 @@ def votar(votacao, cc, candidato, addr):
 		act = info[0] + " " + str(info[1])
 		candidatos[indice] = act
 	
+		if not os.path.exists(path + "votacoes.txt"):
+			return sendMessage(errors.Voter.corr, addr)
 		actual = open(path + votacao + ".votes", "w")
 		for x in range(len(candidatos)):
 		    actual.write(str(candidatos[x]) + "\n")
 
+		if not os.path.exists(path + votacao + ".cc"):
+			return sendMessage(errors.Voter.corr, addr)
 		votos = open(path + votacao + ".cc", "a")
 		votos.write(str(cc) + "\n")
 
@@ -104,7 +121,7 @@ def votar(votacao, cc, candidato, addr):
 
 
 	
-#TEST
+
 def votacao_existe(votacao, addr):
 	if os.path.exists(path + "votacoes.txt"):
 		lista = ficheiroToList("votacoes.txt")
@@ -116,16 +133,29 @@ def votacao_existe(votacao, addr):
 		return sendMessage(errorsVoter.corr, addr)
 
 
-def cc_val(cc, votacao, addr):
-		try:
-			int(cc)
-			if len(str(cc))==8:
-				return True
-			else:
-				sendMessage(errorsVoter.ccinv, addr)
-		except:
-			return sendMessage(errorsVoter.ccinv, addr)
-	
+def votacao_concluida(votacao, addr):
+	if os.path.exists(path + "votacoes.txt"):
+		lista = ficheiroToList("votacoes.txt")
+		if str(votacao + " 2") in lista:
+			return True
+		else:
+			return sendMessage(errorsVoter.voteinv, addr)
+	else:
+		return sendMessage(errorsVoter.corr, addr)
+
+
+
+def cc_val(cc, votacao, addr): 
+    try: 
+      int(cc) 
+      if len(str(cc))==8: 
+        return True 
+      else: 
+        sendMessage(errorsVoter.ccinv, addr) 
+    except: 
+      return sendMessage(errorsVoter.ccinv, addr) 
+
+
 
 def cc_unico(cc, votacao, addr):
     lista = ficheiroToList(votacao + ".cc")
@@ -148,7 +178,6 @@ def votacaoEstado(votacao):
 	return str(votacao[-1])
 
 
-#INFO
 def createInfo(vot):
 	part = color.BOLD + votacaoNome(vot)+ color.END + "\n-"
 	if votacaoEstado(vot) == "0":
@@ -159,16 +188,20 @@ def createInfo(vot):
 		part += "Fechada\n"
 	return part
 
-  
+
+   
 def info(tipo, nome, addr):
 	#import server
 	if str(tipo) == "all":
 		send = "\n\n"
 		lista = ficheiroToList("votacoes.txt")
 
-		for x in range(len(lista)):
-			send += createInfo(lista[x]) + "\n"
-		sendMessage(send, addr)
+		if len(lista) == 1:
+			send += createInfo(lista[0]) + "\n"
+		else:
+			for x in range(len(lista)):
+				send += createInfo(lista[x]) + "\n"
+		return sendMessage(send, addr)
 
 
 	elif str(tipo) == "espec":
@@ -179,11 +212,20 @@ def info(tipo, nome, addr):
 			return sendMessage(errorsManager.voteinexist, addr)
 		send = "\n\n\n"
 		send += createInfo(lista[indice]) + "\n"
-		sendMessage(send, addr)
+		return sendMessage(send, addr)
+
+def resultado(nome, addr):
+
+	if votacao_concluida(nome, addr):
+		for line in reversed(open(path + nome + ".votes").readlines()):
+			linha = line.rstrip()
+			break
+		sendMessage(linha, addr)
+	else:
+		return sendMessage(errorsVoter.voteinv, addr)
 
 
-
-'''
+	'''
 
 
 

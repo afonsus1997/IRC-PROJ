@@ -10,10 +10,14 @@ path = os.getcwd() + "/elecfiles/"
 
 def checkManager(cmd, addr):
 	#import server	
-	send = ""
-	sendMessage(send, addr)
+	
+	#sendMessage(send, addr)
 
 	lengh = len(cmd)
+	print(cmd)
+
+	if cmd == []:
+		return sendMessage(errorsManager.unknwn, addr)	
 
 	if lengh>=1:
 
@@ -23,70 +27,72 @@ def checkManager(cmd, addr):
 			info("all", 0, addr)
 		elif cmd[0] == "info" and lengh == 2: 
 			if cmd[1] == "-help":
-				sendMessage(helpTextManager.info, addr)
+				return sendMessage(helpTextManager.info, addr)
 			else:	
 				info("espec", cmd[1], addr)
 		elif cmd[0] == "info" and lengh > 2:
-			sendMessage(errorsManager.more, addr)
+			return sendMessage(errorsManager.more, addr)
 
 
 		#CRIA ELEICAO
 		elif cmd[0] == "cria_votacao":
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpTextManager.criaeleicao, addr)
+					return sendMessage(helpTextManager.criaeleicao, addr)
 				else:
 					criaVotacao(cmd[1], addr)
 				
 			elif lengh == 1:
-				sendMessage(errorsManager.less, addr)
+				return sendMessage(errorsManager.less, addr)
 			else:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 
 		elif cmd[0] == "abre":
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpTextManager.abre, addr)
+					return sendMessage(helpTextManager.abre, addr)
 				else:
 					abre(cmd[1], addr)
 			elif len== 1:
 				
-				sendMessage(errorsManager.less, addr)
+				return sendMessage(errorsManager.less, addr)
 			elif len > 2:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 
 		elif cmd[0] == "fecha":
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpTextManager.fecha, addr)
+					return sendMessage(helpTextManager.fecha, addr)
 				else:
 					fecha(cmd[1], addr)
 			elif len== 1:
-				sendMessage(errorsManager.less, addr)
+				return sendMessage(errorsManager.less, addr)
 			elif len > 2:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 		elif cmd[0] == "cleandir":
 			if lengh == 1:
 				fileHandler("clean&init")
-				sendMessage(color.RED + color.BOLD + "\n\nDirectory Cleaned!" + color.END, addr)
+				return sendMessage(color.RED + color.BOLD + "\n\nDirectory Cleaned!" + color.END, addr)
 			if lengh == 2:
 				if cmd[1] == "-help":
-					sendMessage(helpText.cleandir, addr)
+					return sendMessage(helpTextManager.cleandir, addr)
 				else:
-					sendMessage(errorsManager.errogen, addr)
+					return sendMessage(errorsManager.errogen, addr)
 
 
 		elif cmd[0] == "commands":
 			if lengh == 1:
-				sendMessage(helpTextManager.comandos, addr)
+				return sendMessage(helpTextManager.comandos, addr)
 			else:
-				sendMessage(errorsManager.more, addr)
+				return sendMessage(errorsManager.more, addr)
 
 		else:
-			sendMessage(errorsManager.unknwn, addr)
+			return sendMessage(errorsManager.unknwn, addr)
+	else:
+		return sendMessage(errorsManager.unknwn, addr)
 
 
 
@@ -109,17 +115,6 @@ def criaVotacao(nome, addr):
 	else:
 		sendMessage(errorsManager.votexiste, addr)
 
-def votacaoNome(votacao):
-	return str(votacao[0:len(votacao)-2])
-
-def votacaoEstado(votacao):
-	return str(votacao[-1])
-
-def votacaoIndice(lista, votacao):
-	for x in range(len(lista)):
-		if votacaoNome(lista[x]) == str(votacao):
-			return x
-	return "erro"
 
 def createInfo(vot):
 	part = color.BOLD + votacaoNome(vot)+ color.END + "\n-"
@@ -190,6 +185,35 @@ def fecha(nome, addr):
 	for x in range(len(lista)):
 		f.write(lista[x] + "\n")
 	f.close()
+
 	
-	send = "Votacao " + color.GREEN + color.BOLD + nome + color.END + " fechada"
+	lista = ficheiroToList(nome + ".votes")
+	for x in range(len(lista)):
+		lista[x] = lista[x].split()
+	candidatoNome = []
+	numeroVotos = []
+	for x in range(len(lista)):
+		candidatoNome.append(lista[x][0]) 
+		numeroVotos.append(int(lista[x][1]))
+	valorvencedor = max(numeroVotos)
+	indicevencedor = [i for i, x in enumerate(numeroVotos) if x == valorvencedor]
+	if len(indicevencedor) == 1:
+		vencedor = candidatoNome[indicevencedor[0]]
+		text = "Ganhou " + vencedor + " com " + str(valorvencedor) + " votos"
+	elif len(indicevencedor) == 2:
+		text = "Empate entre " + candidatoNome[indicevencedor[0]] + " e " + candidatoNome[indicevencedor[1]] + " com " + str(valorvencedor) + " votos"
+		
+	else:
+		text = "Empate entre "
+		for x in range(len(indicevencedor)-1):
+			text += candidatoNome[indicevencedor[x]] + ", "
+		text = text[:-2]
+		text += " e " + candidatoNome[indicevencedor[-1]] + " com " + str(valorvencedor) + " votos"
+
+	file = open(path + nome + ".votes", "a")
+	file.write(text)
+
+	
+	
+	send = "Votacao " + color.GREEN + color.BOLD + nome + color.END + " fechada\n" + text
 	sendMessage(send, addr)

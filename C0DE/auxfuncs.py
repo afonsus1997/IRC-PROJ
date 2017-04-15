@@ -9,7 +9,6 @@ class serverInfo:
 	clients = {}
 	path = os.getcwd() + "/elecfiles/"
 
-
 class color:
    PURPLE = '\033[95m'
    CYAN = '\033[96m'
@@ -39,10 +38,11 @@ class errorsVoter:
 	less = color.BOLD + color.RED + "Erro: " + color.END + "Faltam argumentos!\nUse o unico argumento -help para mais informacoes"
 	unknwn = color.BOLD + color.RED + "Erro: " + color.END + "Comando deconhecido\nUse o comando commands para listar todos os comandos possiveis"
 	revote = color.BOLD + color.RED + "Erro: " + color.END + "O seu voto ja foi contabilizado"
-	voteconc = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja concluido"
+	voteconc = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ja concluida"
 	voteinic = color.BOLD + color.RED + "Erro: " + color.END + "Votacao nao existente"
 	votefec = color.BOLD + color.RED + "Erro: " + color.END + "Votacao fechada"
-	voteinv = color.BOLD + color.RED + "Erro: " + color.END + "Votacao invalida (fechada ou concluida)"
+	voteaibert = color.BOLD + color.RED + "Erro: " + color.END + "Votacao ainda aberta"
+	voteinv = color.BOLD + color.RED + "Erro: " + color.END + "Votacao invalida"
 	candinv = color.BOLD + color.RED + "Erro: " + color.END + "Candidato invalido"
 	corr = color.BOLD + color.RED + "Erro: " + color.END + "Ficheiro de votacao corrompidos"
 	ccinv = color.BOLD + color.RED + "Erro: " + color.END + "info pessoal invalida"
@@ -63,8 +63,10 @@ class helpTextManager:
 	info = "\n\ninfo\n-Lista informacoes dos estados de todas as votacoes\ninfo <nome_votacao>\n-Lista informacoes do estado da votacao apresentada\n"
 	criaeleicao = "\n\ncria_votacao <nome_votacao>\n-Inicializa uma votacao\n"
 	abre = "\n\nabre <nome_votacao>\n-Abre uma votacao fechada\n"
-	fecha = "\n\nfecha <nome_votacao>\n-Fecha uma votacao fechada\n"
+	fecha = "\n\nfecha <nome_votacao>\n-Fecha uma votacao aberta\n"
 	cleandir = "\n\ncleandir\n-Limpa a directoria de trabalho (APAGA TODOS OS DADOS DE VOTACOES!)\n"
+	logout = "\n\nlogout\n-Fecha a sessao actual\n"
+
 	
 	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info\n-cria_votacao\n-abre\n-fecha\n-cleandir\n-logout\n-exit\n-killserver"
 
@@ -76,9 +78,9 @@ class helpTextComission:
 
 class helpTextVoter:
 	info = "\n\ninfo\n-Lista informacoes dos de uma votacao\ninfo <nome_votacao>\n"
-	adicionacandidato = "\n\nadiciona_candidato <votacao> <nome_candidato>\n-Adiciona um candidato a uma votacao especifica\n"
-
-	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-adiciona_candidato <votacao> <nome_candidato>\n-info <votacao>"
+	resultados = "\n\nresultados <votacao>\n-Lista resultados de uma votacao terminada\n"
+	vota = "\n\nvota <votacao> <cc> <candidato>\n-Vota numa votacao especifica fornecendo o cc do utilizador (se valido) e candidato (se valido)\n"
+	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info <votacao> \n-resultados <votacao>\n-vota <votacao> <cc> <candidato>"
 
 
 def fileHandler(op):
@@ -109,3 +111,16 @@ def ficheiroToList(nome):
 		f.close()
 	ret = [x.strip() for x in content]
 	return ret
+
+
+def votacaoNome(votacao):
+	return str(votacao[0:len(votacao)-2])
+
+def votacaoEstado(votacao):
+	return str(votacao[-1])
+
+def votacaoIndice(lista, votacao):
+	for x in range(len(lista)):
+		if votacaoNome(lista[x]) == str(votacao):
+			return x
+	return "erro"
