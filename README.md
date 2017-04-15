@@ -1,7 +1,7 @@
 
 # Projecto IRC
 
-
+## 15/4/17 - Everithing is working! FINAL
 
 ## Lista de comandos
 ```
