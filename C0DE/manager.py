@@ -9,12 +9,8 @@ path = os.getcwd() + "/elecfiles/"
 
 
 def checkManager(cmd, addr):
-	#import server	
 	
-	#sendMessage(send, addr)
-
 	lengh = len(cmd)
-	print(cmd)
 
 	if cmd == []:
 		return sendMessage(errorsManager.unknwn, addr)	
@@ -54,12 +50,11 @@ def checkManager(cmd, addr):
 					return sendMessage(helpTextManager.abre, addr)
 				else:
 					abre(cmd[1], addr)
-			elif len== 1:
-				
+			elif lengh < 2:
 				return sendMessage(errorsManager.less, addr)
-			elif len > 2:
+			elif lengh > 2:
 				return sendMessage(errorsManager.more, addr)
-
+			
 
 		elif cmd[0] == "fecha":
 			if lengh == 2:
@@ -67,9 +62,9 @@ def checkManager(cmd, addr):
 					return sendMessage(helpTextManager.fecha, addr)
 				else:
 					fecha(cmd[1], addr)
-			elif len== 1:
+			elif lengh== 1:
 				return sendMessage(errorsManager.less, addr)
-			elif len > 2:
+			elif lengh > 2:
 				return sendMessage(errorsManager.more, addr)
 
 		elif cmd[0] == "cleandir":
@@ -97,7 +92,6 @@ def checkManager(cmd, addr):
 
 
 def criaVotacao(nome, addr):
-	#import server
 	votacoes = ficheiroToList("votacoes.txt")
 	if not ((nome + " 0" in votacoes) or (nome + " 1" in votacoes) or (nome + " 2" in votacoes)):
 		votacoes.append(nome)
@@ -128,7 +122,6 @@ def createInfo(vot):
 
 
 def info(tipo, nome, addr):
-	#import server
 	if str(tipo) == "all":
 		send = "\n\n"
 		lista = ficheiroToList("votacoes.txt")
@@ -149,7 +142,6 @@ def info(tipo, nome, addr):
 		sendMessage(send, addr)
 	
 def abre(nome, addr):
-	#import server
 	lista = ficheiroToList("votacoes.txt")
 	indice = votacaoIndice(lista, nome)
 	if indice == "erro":
@@ -169,7 +161,6 @@ def abre(nome, addr):
 	sendMessage(send, addr)
 
 def fecha(nome, addr):
-	#import server
 	lista = ficheiroToList("votacoes.txt")
 	indice = votacaoIndice(lista, nome)
 	if indice == "erro":

@@ -19,7 +19,6 @@ class color:
 
 
 SERVER_IP   = '127.0.0.1'
-#SERVER_PORT=0
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 inputs = [sock, sys.stdin]
 
@@ -96,14 +95,11 @@ print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
 
 while True:
   ins, outs, exs = select.select(inputs,[],[])
-  #select devolve para a lista ins quem esta a espera de ler
+  
   
   for i in ins:
-    # i == sys.stdin - alguem escreveu na consola, vamos ler e enviar
     if i == sys.stdin:
-      # sys.stdin.readline() le da consola
       msg = sys.stdin.readline()
-      # envia mensagem da consola para o servidor
       sock.sendto(msg.encode(),(SERVER_IP,SERVER_PORT))
       if msg == "killserver\n":
       	sys.exit("Server Exited")
@@ -112,10 +108,8 @@ while True:
       if msg == "logout\n":
       	loginHandler()
       	print(color.BOLD + color.YELLOW + "Input message to server:" + color.END)
-      	#print("---------------------------------------------------------------------------------\n\n")
 
 
-    # i == sock - o servidor enviou uma mensagem para o socket
     elif i == sock:
       (msg,addr) = sock.recvfrom(1024)
       print(color.BOLD + color.YELLOW + "\n\nMessage received from server: "+ color.END + msg.decode() + "\n\n")

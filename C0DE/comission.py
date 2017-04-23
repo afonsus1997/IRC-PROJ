@@ -3,20 +3,6 @@ from auxfuncs import*
 
 path = os.getcwd() + "/elecfiles/"
 
-'''
-info - X
-
-candidatos - X
-
-adicionar - X
-
-outro - X
-
-'''
-
-
-
-
 
 
 
@@ -28,7 +14,8 @@ def checkComission(cmd, addr):
 		if cmd[0] == "commands":
 			return sendMessage(helpTextComission.comandos, addr)
 		
-
+		elif cmd[0] == "adiciona_candidato" or cmd[0] == "info":
+			return sendMessage(errorsComission.less, addr)
 		else:
 			return sendMessage(errorsComission.unknwn, addr)
 
@@ -36,11 +23,13 @@ def checkComission(cmd, addr):
 		return sendMessage(errorsComission.less, addr)
 
 	elif lengh == 2:
-		print("entrei\n")
+	
 		if cmd[0] == "info" and cmd[1] == "-help":
 			return sendMessage(helpTextComission.info, addr)
 		if cmd[0] == "adiciona_candidato" and cmd[1] == "-help":
 			return sendMessage(helpTextComission.adicionacandidato, addr)
+		if cmd[0] == "adiciona_candidato":
+			return sendMessage(errorsComission.less, addr)			
 		if cmd[0] == "info":
 			info(cmd[1], addr)
 		else:	
@@ -52,6 +41,9 @@ def checkComission(cmd, addr):
 		else:
 			return sendMessage(errorsComission.unknwn, addr)	
 
+	elif lengh >3 and cmd[0] == "adiciona_candidato":
+		sendMessage(errorsComission.more, addr)	
+
 	else:
 		return sendMessage(errorsComission.unknwn, addr)
 
@@ -59,7 +51,7 @@ def checkComission(cmd, addr):
 
 
 def info(nome, addr):
-	#import server
+
 	send = "\n\n"
 	lista_elei = ficheiroToList("votacoes.txt")
 	send += "Existem os seguintes candidatos para a votacao " + str(nome) + ":\n"
@@ -75,8 +67,8 @@ def info(nome, addr):
 
 
 def ficheiroToList(nome):
+	
 	ret = open(path + nome, "r")
-	#votacoes = votacoes.split()
 	with open(path + nome) as f:
 		content = f.readlines()
 		f.close()
@@ -101,10 +93,11 @@ def votacaoIndice(lista, votacao):
 
 
 def adicionaCandidato(nome, votacao, addr):
-	#import server
 	existe_candidato = False
+	if not os.path.exists(path + "votacoes.txt"):
+		return sendMessage(errorsComission.corr, addr)
 	lista_elei = ficheiroToList("votacoes.txt")
-	if os.path.exists(votacao + ".candidates"):
+	if not os.path.exists(path + votacao + ".candidates"):
 		return sendMessage(errorsComission.votacaoinexist, addr)
 	lista_cand = ficheiroToList(votacao + ".candidates")
 	if votacao + " 0" in lista_elei or votacao + " 1" in lista_elei or votacao + " 2" in lista_elei:

@@ -5,7 +5,7 @@ import shutil
 class serverInfo:
 	PORT = 0
 	server = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-	addrs = {} # dict: endereco -> nome. Ex: clients[('127.0.0.1',17234)]="user"
+	addrs = {} 
 	clients = {}
 	path = os.getcwd() + "/elecfiles/"
 
@@ -57,6 +57,7 @@ class errorsComission:
 	candidatoexis = color.BOLD + color.RED + "Erro: " + color.END + "O candidato ja esta adicionado a esta votacao"
 	candidatoenix = color.BOLD + color.RED + "Erro: " + color.END + "O candidato ja esta adicionado a esta votacao"
 	errogen = color.BOLD + color.RED + "Erro: " + color.END + "Comando Incorrecto"
+	corr = color.BOLD + color.RED + "Erro: " + color.END + "Ficheiro de votacao corrompidos"
 
 
 
@@ -69,7 +70,7 @@ class helpTextManager:
 	logout = "\n\nlogout\n-Fecha a sessao actual\n"
 
 	
-	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info\n-cria_votacao\n-abre\n-fecha\n-cleandir\n-logout\n-exit\n-killserver"
+	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info\n-cria_votacao\n-abre\n-fecha\n-cleandir\n-logout\n-exit\n-killserver\n-logout"
 
 class helpTextComission:
 	info = "\n\ninfo\n-Lista informacoes dos de uma votacao\ninfo <nome_votacao>\n"
@@ -81,8 +82,11 @@ class helpTextVoter:
 	info = "\n\ninfo\n-Lista informacoes dos de uma votacao\ninfo <nome_votacao>\n"
 	resultados = "\n\nresultados <votacao>\n-Lista resultados de uma votacao terminada\n"
 	vota = "\n\nvota <votacao> <cc> <candidato>\n-Vota numa votacao especifica fornecendo o cc do utilizador (se valido) e candidato (se valido)\n"
-	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info <votacao> \n-resultados <votacao>\n-vota <votacao> <cc> <candidato>"
+	comandos = "\n\nComandos possiveis:       (use o argumento -help para obter info sobre cada comando)\n-info <votacao> \n-resultados <votacao>\n-vota <votacao> <cc> <candidato>\n-logout"
 
+
+def stopServer():
+    serverInfo.server.close()
 
 def fileHandler(op):
 	if op == "init":
@@ -100,13 +104,11 @@ def fileHandler(op):
 
 
 def sendMessage(msg, addr):
-	#import server
 	sending = str(msg)
 	serverInfo.server.sendto(sending.encode(),addr)
 
 def ficheiroToList(nome):
 	ret = open(serverInfo.path + nome, "r")
-	#votacoes = votacoes.split()
 	with open(serverInfo.path + nome) as f:
 		content = f.readlines()
 		f.close()
